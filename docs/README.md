@@ -1,14 +1,9 @@
-# llm-research
+# Bioinformatics Nextflow Research
 
-This repository hosts some exploratory research code for using large language models for applications in cancer and immunology
+This repository hosts some Nextflow workflow tutorials and research applications.
 
-# About llm-research workflows
-
-Detailed instruction about workflow setup, data preparation, training or fine tuning and testing TBD docs
-
-
-## Setup
+# About bio-nextflow research setup
 
 To be added
 
-Create a virtual python environment
+Instructions on how to deploy nextflow workflows will be included with each set of workflow scripts and notebooks.
