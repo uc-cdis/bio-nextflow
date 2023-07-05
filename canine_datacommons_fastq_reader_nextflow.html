@@ -3,7 +3,7 @@
 <head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>basic_nextflow</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>canine_datacommons_fastq_reader_nextflow</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 
 
@@ -14597,7 +14597,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><em>This tutorial provides a summarized explanation of Nextflow, derived from the original Nextflow training documents available at <a href="https://training.nextflow.io/">https://training.nextflow.io/</a>. In addition, it also showcases an interactive example of how to utilize Nextflow in BRH adapted from the Canine Data Commons FASTQ Reader tutorial at <a href="https://brh.data-commons.org/dashboard/Public/notebooks/canine_datacommons_fastq_reader.html">https://brh.data-commons.org/dashboard/Public/notebooks/canine_datacommons_fastq_reader.html</a>.</em></p>
+<p><em>This tutorial provides a summarized explanation of Nextflow, derived from the original <a href="https://training.nextflow.io/">Nextflow training documents</a>. In addition, it also showcases an interactive example of how to utilize Nextflow in BRH adapted from the <a href="https://brh.data-commons.org/dashboard/Public/notebooks/canine_datacommons_fastq_reader.html">Canine Data Commons FASTQ Reader tutorial</a>.</em></p>
 
 </div>
 </div>
@@ -14609,7 +14609,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>In order for this tutorial to be able to download data from Gen3, access to the Tutorial CANINE Google Login must be authorized under the Profile page in BRH. Read more at <a href="https://brh.data-commons.org/dashboard/Public/index.html#LinkingAccessTo">https://brh.data-commons.org/dashboard/Public/index.html#LinkingAccessTo</a> .</p>
+<p>In order for this tutorial to be able to download data from Gen3, access to the Tutorial CANINE Google Login must be authorized under the Profile page in BRH. Pulling the data from gen3 may not work on your local machine. <a href="https://brh.data-commons.org/dashboard/Public/index.html#LinkingAccessTo">Read more</a></p>
 
 </div>
 </div>
@@ -14643,8 +14643,8 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Nextflow is a tool that helps to easily create workflows for data-heavy computations. It's built around the idea that Linux, with its many command-line and scripting tools, is an ideal language for data science.</p>
-<p>Nextflow allows you to define complex interactions between programming languages and gives you a sophisticated parallel computing environment in which to write data science pipelines (termed workflows). It's key features include:</p>
+<p>Nextflow is a tool that helps to easily create workflows for data-heavy computations. It's built around the idea that Linux, with its many command-line and scripting tools, can be used to create data science pipelines.</p>
+<p>Nextflow allows you to define complex interactions between programming languages and gives you a sophisticated parallel computing environment in which to write pipelines (termed workflows). It's key features include:</p>
 <ul>
 <li>Workflow portability and reproducibility</li>
 <li>Scalability of parallelization and deployment</li>
@@ -14809,48 +14809,6 @@ workflow<span class="w"> </span><span class="o">{</span>
 </div>
 </div>
 </div>
-<div id="cell-id=96d1587d-1bc6-4c33-be2d-fa32b2909606" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env nextflow</span>
-
-params.fastq_file<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;SRR7012463_1.fastq&quot;</span><span class="w"> </span>//<span class="w"> </span>Name<span class="w"> </span>of<span class="w"> </span>retreived<span class="w"> </span>file
-params.fastq_guid<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;dg.C78ne/4527012c-3a5f-481d-820c-da7b77a26b48&quot;</span>
-params.max_records<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="w"> </span>//<span class="w"> </span>max<span class="w"> </span>records<span class="w"> </span>to<span class="w"> </span>process
-params.endpoint<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://caninedc.org&quot;</span>
-params.refresh_file<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/home/jovyan/.gen3/credentials.json&quot;</span>
-...
-workflow<span class="w"> </span><span class="o">{</span>
-<span class="w">    </span><span class="nv">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>DownloadFastqFile<span class="o">()</span>
-<span class="w">    </span>AnalyzeFastqFile<span class="o">(</span>file<span class="o">)</span>
-<span class="o">}</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-</div>
-<div id="cell-id=c52c065e-f04c-42d3-b2a7-e571bff4c287" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>These next lines of code are setting up some default parameters for the Nextflow script. These parameters can be used within the script and can also be overridden when you run the script.</p>
-<p>You can set or override the parameters when you run the script by passing them as command line arguments with the <code>--</code> prefix.</p>
-<p>For example, to run the script with different values for <code>fastq_file</code> and <code>max_records</code>, you would use the following command:</p>
-<div class="highlight"><pre><span></span>nextflow<span class="w"> </span>run<span class="w"> </span>canine.nf<span class="w"> </span>--fastq_file<span class="o">=</span><span class="s2">&quot;NewFile.fastq&quot;</span><span class="w"> </span>--max_records<span class="o">=</span><span class="m">20</span>
-</pre></div>
-<p><code>nextflow run canine.nf</code> is the ordinary syntax for running the script, <code>NewFile.fastq</code> is the new value for <code>fastq_file</code> and <code>20</code> is the new value for <code>max_records</code>.</p>
-<p>This is one of the features that makes Nextflow powerful for pipeline scripting. By using parameters, the same script can be used with different data or settings without any changes to the script itself.</p>
-
-</div>
-</div>
-</div>
-</div>
 <div id="cell-id=98d7b26a-4a1f-49fd-adde-a1c740aabd73" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -14896,9 +14854,9 @@ workflow<span class="w"> </span><span class="o">{</span>
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>This process consists of several major components:</p>
 <ol>
-<li><p><code>conda './environment.yml'</code>: This is an optional line which tells Nextflow to use the conda environment specified in the 'environment.yml' file to run this process (or create it if it doesn't already exist). Conda is a package and environment management system, and using this statement ensures that the correct dependencies are installed and used for this process. It is also possible to specify the conda environment to be used in the nextflow configuration file instead (see below for more details on the Nextflow configuration file).</p>
+<li><p><code>conda './environment.yml'</code>: This is an optional line which tells Nextflow to use the conda environment specified in the 'environment.yml' file to run this process (or create it if it doesn't already exist). Conda is a package and environment management system, and using this statement ensures that the correct dependencies are installed and used for this process. It is also possible to specify the conda environment to be used in the <code>nextflow.config</code> file instead (see below for more details on the Nextflow configuration file).</p>
 </li>
-<li><p><code>output: path(&quot;${params.fastq_file}&quot;)</code>: This line specifies what the process will output. In this case, the process outputs the file that was downloaded and whose name is given by the parameter <code>params.fastq_file</code>.</p>
+<li><p><code>output: path(&quot;${params.fastq_file}&quot;)</code>: This line specifies what the process will output. In this case, the process outputs the file that was downloaded and whose name is given by the parameter <code>params.fastq_file</code> (the value of this and all other parameters is given in the <code>nextflow.config</code> file. The setup for this file is explained later).</p>
 </li>
 <li><p><code>script:</code>: This begins the section where the commands to be run by this process are defined. In this case the commands are bash script to download the <code>params.fastq_file</code> file from gen3.</p>
 </li>
@@ -14914,7 +14872,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The <code>./environment.yml</code> file being used to specify the conda environment installs the needed dependencies for the python scripts being run:</p>
+<p>The <code>./environment.yml</code> file being used to specify the conda environment installs the needed dependencies for the python scripts being run. Read more about conda environment files <a href="https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html">here</a>.</p>
 
 </div>
 </div>
@@ -14956,7 +14914,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Overwriting environment.yml
+<pre>Writing environment.yml
 </pre>
 </div>
 </div>
@@ -14977,41 +14935,25 @@ workflow<span class="w"> </span><span class="o">{</span>
 </div>
 </div>
 </div>
-</div>
-<div id="cell-id=254c0771-8327-4891-8001-cfd88a12dc75" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Read more about conda environment files at <a href="https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html">https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html</a> .</p>
-
-</div>
-</div>
-</div>
-</div>
-<div id="cell-id=a76cf344-6e8c-4aa6-8092-f828b3f00b80" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The Nextflow configuration file gives additional setup details for the Nextflow workflow. In this case, it only needs to specify that Conda is to be used for setting up the environments for the individuals processes.</p>
-
-</div>
-</div>
-</div>
 </div><div id="cell-id=06016bb7-5398-494b-bfd0-eefd48ee1b55" class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%writefile</span> nextflow.config
 <span class="o">//</span> <span class="n">enables</span> <span class="n">the</span> <span class="n">processes</span> <span class="n">to</span> <span class="n">be</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">conda</span> <span class="n">environment</span>
 <span class="n">conda</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="n">true</span>
+
+<span class="n">params</span> <span class="p">{</span>
+    <span class="n">fastq_file</span> <span class="o">=</span> <span class="s2">&quot;SRR7012463_1.fastq&quot;</span> <span class="o">//</span> <span class="n">Name</span> <span class="n">of</span> <span class="n">retreived</span> <span class="n">file</span>
+    <span class="n">fastq_guid</span> <span class="o">=</span> <span class="s2">&quot;dg.C78ne/4527012c-3a5f-481d-820c-da7b77a26b48&quot;</span> <span class="o">//</span> <span class="n">GUID</span> <span class="k">for</span> <span class="n">fastq</span> <span class="n">file</span>
+    <span class="n">max_records</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">//</span> <span class="nb">max</span> <span class="n">records</span> <span class="n">to</span> <span class="n">process</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;https://caninedc.org&quot;</span>
+    <span class="n">refresh_file</span> <span class="o">=</span> <span class="s2">&quot;/home/jovyan/.gen3/credentials.json&quot;</span>
+<span class="p">}</span>
 </pre></div>
 
      </div>
@@ -15031,7 +14973,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Overwriting nextflow.config
+<pre>Writing nextflow.config
 </pre>
 </div>
 </div>
@@ -15040,6 +14982,36 @@ workflow<span class="w"> </span><span class="o">{</span>
 
 </div>
 
+</div>
+<div id="cell-id=e3103353" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>The Nextflow configuration file gives additional setup details for the Nextflow workflow. In this case, it specifies that Conda is to be used for setting up the environments for the individuals processes and sets up some default parameters for the Nextflow script.</p>
+
+</div>
+</div>
+</div>
+</div>
+<div id="cell-id=13fd6128" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>These parameters can be used within the script and can also be overridden when you run the script.</p>
+<p>You can set or override the parameters when you run the script by passing them as command line arguments with the <code>--</code> prefix.</p>
+<p>For example, to run the script with different values for <code>fastq_file</code> and <code>max_records</code>, you would use the following command:</p>
+<div class="highlight"><pre><span></span>nextflow<span class="w"> </span>run<span class="w"> </span>canine.nf<span class="w"> </span>--fastq_file<span class="o">=</span><span class="s2">&quot;NewFile.fastq&quot;</span><span class="w"> </span>--max_records<span class="o">=</span><span class="m">20</span>
+</pre></div>
+<p><code>nextflow run canine.nf</code> is the ordinary syntax for running the script, <code>NewFile.fastq</code> is the new value for <code>fastq_file</code> and <code>20</code> is the new value for <code>max_records</code>. The <code>fastq_file</code> parameter is accessed in the Nextflow script itself through <code>{params.fastq_file}</code>.</p>
+<p>This is one of the features that makes Nextflow powerful for pipeline scripting. By using parameters, the same script can be used with different data or settings without any changes to the script itself.</p>
+
+</div>
+</div>
+</div>
 </div>
 <div id="cell-id=ba8b5830-0fce-4f34-b6fe-70b962cd1cc9" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper">
@@ -15091,7 +15063,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>The second process in this workflow takes the file specified by the parameter <code>params.fastq_file</code> and runs the Python script <code>analyze_fastq.py</code> which can be found in the same directory as the Nextflow script (this is indicated by the <code>${baseDir}/</code> before the name of the Python script to be run).</p>
-<p>The <code>analyze_fastq.py</code> script is run with four command-line parameters each of which is specified by one of the earlier specified <code>params</code>. The reason that the file needs to be passed as an input to the <code>AnalyzeFastqFile</code> script in addition to being specified as a command-line parameter for the Python script is that specifying the file as an input to the process indicates to Nextflow that that file must be created before this script can be run while feeding the name of the file as a command-line parameter of the Python script indicates to the Python script what file name to use in its analysis.</p>
+<p>The <code>analyze_fastq.py</code> script is run with four command-line parameters each of which is specified by one of the parameters specified in the configuration file. The reason that the file needs to be passed as an input to the <code>AnalyzeFastqFile</code> script in addition to being specified as a command-line parameter for the Python script is that specifying the file as an input to the process indicates to Nextflow that that file must be created before this script can be run while feeding the name of the file as a command-line parameter of the Python script indicates to the Python script what file name to use in its analysis.</p>
 <p>Lastly, the AnalyzeFastqFile process also specifies <code>${params.fastq_file}_analysis.txt</code> as the output of the <code>analyze_fastq.py</code>. The actual code to create the file is within the Python script itself but this section indicates to the process to expect a text file named <code>${params.fastq_file}_analysis.txt</code> to be written by the Python script. The line <code>publishDir &quot;${baseDir}/results&quot;, mode: 'copy'</code> indicates for Nextflow to copy the <code>${params.fastq_file}_analysis.txt</code> file produced by this process to the results folder in the same main directory as the Nextflow script (<code>${baseDir}</code>). This line will also automatically create a results folder for the output to be copied into if one doesn't already exist.</p>
 
 </div>
@@ -15114,7 +15086,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%writefile</span> analyze_fastq.py
@@ -15165,7 +15137,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Overwriting analyze_fastq.py
+<pre>Writing analyze_fastq.py
 </pre>
 </div>
 </div>
@@ -15228,17 +15200,11 @@ workflow<span class="w"> </span><span class="o">{</span>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%writefile</span> canine.nf
 <span class="ch">#!/usr/bin/env nextflow</span>
-
-<span class="n">params</span><span class="o">.</span><span class="n">fastq_file</span> <span class="o">=</span> <span class="s2">&quot;SRR7012463_1.fastq&quot;</span> <span class="o">//</span> <span class="n">Name</span> <span class="n">of</span> <span class="n">retreived</span> <span class="n">file</span>
-<span class="n">params</span><span class="o">.</span><span class="n">fastq_guid</span> <span class="o">=</span> <span class="s2">&quot;dg.C78ne/4527012c-3a5f-481d-820c-da7b77a26b48&quot;</span> <span class="o">//</span> <span class="n">GUID</span> <span class="k">for</span> <span class="n">fastq</span> <span class="n">file</span>
-<span class="n">params</span><span class="o">.</span><span class="n">max_records</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">//</span> <span class="nb">max</span> <span class="n">records</span> <span class="n">to</span> <span class="n">process</span>
-<span class="n">params</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;https://caninedc.org&quot;</span>
-<span class="n">params</span><span class="o">.</span><span class="n">refresh_file</span> <span class="o">=</span> <span class="s2">&quot;/home/jovyan/.gen3/credentials.json&quot;</span>
 
 <span class="n">process</span> <span class="n">DownloadFastqFile</span> <span class="p">{</span>
 
@@ -15300,7 +15266,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Overwriting canine.nf
+<pre>Writing canine.nf
 </pre>
 </div>
 </div>
@@ -15349,7 +15315,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>nextflow<span class="w"> </span>run<span class="w"> </span>canine.nf<span class="w"> </span>--resume
@@ -15373,38 +15339,42 @@ workflow<span class="w"> </span><span class="o">{</span>
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>N E X T F L O W  ~  version 22.10.6
-[3.016s][warning][jni,resolve] Re-registering of platform native method: java.lang.PanwHooksNs.HookArgs0()V from code in a different classloader
-[3.016s][warning][jni,resolve] Re-registering of platform native method: java.lang.PanwHooksNs.HookArgs1(Ljava/lang/Object;)V from code in a different classloader
-[3.016s][warning][jni,resolve] Re-registering of platform native method: java.lang.PanwHooksNs.HookArgs2(Ljava/lang/Object;Ljava/lang/Object;)V from code in a different classloader
-[3.016s][warning][jni,resolve] Re-registering of platform native method: java.lang.PanwHooksNs.HookArgs3(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V from code in a different classloader
-[3.017s][warning][jni,resolve] Re-registering of platform native method: java.lang.PanwHooksNs.HookArgs4(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V from code in a different classloader
-Launching `canine.nf` [ecstatic_mirzakhani] DSL2 - revision: 78346020c4
+Launching `canine.nf` [exotic_waddington] DSL2 - revision: a33c65c746
+[3.042s][warning][jni,resolve] Re-registering of platform native method: java.lang.PanwHooksNs.HookArgs0()V from code in a different classloader
+[3.042s][warning][jni,resolve] Re-registering of platform native method: java.lang.PanwHooksNs.HookArgs1(Ljava/lang/Object;)V from code in a different classloader
+[3.042s][warning][jni,resolve] Re-registering of platform native method: java.lang.PanwHooksNs.HookArgs2(Ljava/lang/Object;Ljava/lang/Object;)V from code in a different classloader
+[3.042s][warning][jni,resolve] Re-registering of platform native method: java.lang.PanwHooksNs.HookArgs3(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V from code in a different classloader
+[3.042s][warning][jni,resolve] Re-registering of platform native method: java.lang.PanwHooksNs.HookArgs4(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V from code in a different classloader
 [-        ] process &gt; DownloadFastqFile -
 [-        ] process &gt; AnalyzeFastqFile  -
 
 [-        ] process &gt; DownloadFastqFile -
 [-        ] process &gt; AnalyzeFastqFile  -
-Creating env using conda: ./environment.yml [cache /home/jovyan/pd/work/conda/canine-99179bc49932240ebc733d72b9f23f31]
+Creating env using conda: ./environment.yml [cache /home/jovyan/work/conda/canine-99179bc49932240ebc733d72b9f23f31]
 
 executor &gt;  local (1)
-[9d/063f2f] process &gt; DownloadFastqFile [  0%] 0 of 1
+[2c/d4c3d6] process &gt; DownloadFastqFile [  0%] 0 of 1
 [-        ] process &gt; AnalyzeFastqFile  -
 
 
-executor &gt;  local (1)
-[9d/063f2f] process &gt; DownloadFastqFile [100%] 1 of 1 ✔
-[-        ] process &gt; AnalyzeFastqFile  [  0%] 0 of 1
+executor &gt;  local (2)
+[2c/d4c3d6] process &gt; DownloadFastqFile [100%] 1 of 1 ✔
+[15/19764f] process &gt; AnalyzeFastqFile  [  0%] 0 of 1
 
 
 executor &gt;  local (2)
-[9d/063f2f] process &gt; DownloadFastqFile [100%] 1 of 1 ✔
-[10/c05464] process &gt; AnalyzeFastqFile  [  0%] 0 of 1
+[2c/d4c3d6] process &gt; DownloadFastqFile [100%] 1 of 1 ✔
+[15/19764f] process &gt; AnalyzeFastqFile  [  0%] 0 of 1
 
 executor &gt;  local (2)
-[9d/063f2f] process &gt; DownloadFastqFile [100%] 1 of 1 ✔
-[10/c05464] process &gt; AnalyzeFastqFile  [100%] 1 of 1 ✔
-<span class="ansi-green-intense-fg ansi-bold">Completed at: 20-Jun-2023 23:49:55
-Duration    : 2m 13s
+[2c/d4c3d6] process &gt; DownloadFastqFile [100%] 1 of 1 ✔
+[15/19764f] process &gt; AnalyzeFastqFile  [  0%] 0 of 1 ✔
+
+executor &gt;  local (2)
+[2c/d4c3d6] process &gt; DownloadFastqFile [100%] 1 of 1 ✔
+[15/19764f] process &gt; AnalyzeFastqFile  [100%] 1 of 1 ✔
+<span class="ansi-green-intense-fg ansi-bold">Completed at: 05-Jul-2023 18:47:51
+Duration    : 4m 49s
 CPU hours   : (a few seconds)
 Succeeded   : 2
 </span>

@@ -14672,7 +14672,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>mkdir<span class="w"> </span>-p<span class="w"> </span>scripts<span class="w"> </span>envs
@@ -14723,7 +14723,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%writefile</span> envs/env1.yaml
@@ -14809,7 +14809,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Overwriting envs/env2.yaml
+<pre>Writing envs/env2.yaml
 </pre>
 </div>
 </div>
@@ -14858,7 +14858,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%writefile</span> scripts/script1.py
@@ -14919,7 +14919,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%writefile</span> scripts/script2.py
@@ -15005,21 +15005,17 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%writefile</span> nextflow.config
 
-<span class="n">profiles</span> <span class="p">{</span>
-    <span class="n">standard</span> <span class="p">{</span>
-        <span class="n">process</span> <span class="p">{</span>
-            <span class="n">withName</span><span class="p">:</span> <span class="n">SCRIPT1</span> <span class="p">{</span>
-                <span class="n">conda</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="si">{baseDir}</span><span class="s2">/envs/env1.yaml&quot;</span>
-            <span class="p">}</span>
-            <span class="n">withName</span><span class="p">:</span> <span class="n">SCRIPT2</span> <span class="p">{</span>
-                <span class="n">conda</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="si">{baseDir}</span><span class="s2">/envs/env2.yaml&quot;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
+<span class="n">process</span> <span class="p">{</span>
+    <span class="n">withName</span><span class="p">:</span> <span class="n">SCRIPT1</span> <span class="p">{</span>
+        <span class="n">conda</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="si">{baseDir}</span><span class="s2">/envs/env1.yaml&quot;</span>
+    <span class="p">}</span>
+    <span class="n">withName</span><span class="p">:</span> <span class="n">SCRIPT2</span> <span class="p">{</span>
+        <span class="n">conda</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="si">{baseDir}</span><span class="s2">/envs/env2.yaml&quot;</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
@@ -15041,7 +15037,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Writing nextflow.config
+<pre>Overwriting nextflow.config
 </pre>
 </div>
 </div>
@@ -15092,13 +15088,12 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%writefile</span> main.nf
 
 <span class="n">process</span> <span class="n">SCRIPT1</span> <span class="p">{</span>
-    <span class="n">label</span> <span class="s1">&#39;script1&#39;</span>
     <span class="n">publishDir</span> <span class="s2">&quot;$</span><span class="si">{baseDir}</span><span class="s2">/results&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="s1">&#39;copy&#39;</span>
     
     <span class="n">output</span><span class="p">:</span>
@@ -15111,7 +15106,6 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <span class="p">}</span>
 
 <span class="n">process</span> <span class="n">SCRIPT2</span> <span class="p">{</span>
-    <span class="n">label</span> <span class="s1">&#39;script2&#39;</span>
     <span class="n">publishDir</span> <span class="s2">&quot;$</span><span class="si">{baseDir}</span><span class="s2">/results&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="s1">&#39;copy&#39;</span>
     
     <span class="n">output</span><span class="p">:</span>
@@ -15146,7 +15140,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Overwriting main.nf
+<pre>Writing main.nf
 </pre>
 </div>
 </div>
@@ -15171,10 +15165,10 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>nextflow<span class="w"> </span>run<span class="w"> </span>main.nf<span class="w"> </span>-profile<span class="w"> </span>standard
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>nextflow<span class="w"> </span>run<span class="w"> </span>main.nf
 </pre></div>
 
      </div>
@@ -15194,26 +15188,26 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>N E X T F L O W  ~  version 22.10.6
-Launching `main.nf` [mad_wing] DSL2 - revision: 7e539e73fb
-[-        ] process &gt; SCRIPT1 [  0%] 0 of 1
-[-        ] process &gt; SCRIPT2 [  0%] 0 of 1
+<pre>N E X T F L O W  ~  version 23.04.2
+Launching `main.nf` [shrivelled_carlsson] DSL2 - revision: 161ca7a2b7
+[-        ] process &gt; SCRIPT1 -
+[-        ] process &gt; SCRIPT2 -
 
 executor &gt;  local (2)
-[b4/d1a72f] process &gt; SCRIPT1 [  0%] 0 of 1
-[24/9398ad] process &gt; SCRIPT2 [  0%] 0 of 1
+[06/a925df] process &gt; SCRIPT1 [  0%] 0 of 1
+[b7/3a3d72] process &gt; SCRIPT2 [  0%] 0 of 1
 
 executor &gt;  local (2)
-[b4/d1a72f] process &gt; SCRIPT1 [100%] 1 of 1 ✔
-[24/9398ad] process &gt; SCRIPT2 [  0%] 0 of 1
+[06/a925df] process &gt; SCRIPT1 [100%] 1 of 1 ✔
+[b7/3a3d72] process &gt; SCRIPT2 [  0%] 0 of 1
 
 executor &gt;  local (2)
-[b4/d1a72f] process &gt; SCRIPT1 [100%] 1 of 1 ✔
-[24/9398ad] process &gt; SCRIPT2 [100%] 1 of 1 ✔
+[06/a925df] process &gt; SCRIPT1 [100%] 1 of 1 ✔
+[b7/3a3d72] process &gt; SCRIPT2 [100%] 1 of 1 ✔
 
 executor &gt;  local (2)
-[b4/d1a72f] process &gt; SCRIPT1 [100%] 1 of 1 ✔
-[24/9398ad] process &gt; SCRIPT2 [100%] 1 of 1 ✔
+[06/a925df] process &gt; SCRIPT1 [100%] 1 of 1 ✔
+[b7/3a3d72] process &gt; SCRIPT2 [100%] 1 of 1 ✔
 
 </pre>
 </div>
