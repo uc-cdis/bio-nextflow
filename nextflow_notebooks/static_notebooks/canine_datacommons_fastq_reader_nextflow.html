@@ -14769,8 +14769,9 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env nextflow</span>
 ...
 workflow<span class="w"> </span><span class="o">{</span>
-<span class="w">    </span><span class="nv">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>DownloadFastqFile<span class="o">()</span>
-<span class="w">    </span>AnalyzeFastqFile<span class="o">(</span>file<span class="o">)</span>
+<span class="w">    </span><span class="nv">files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>DownloadFastqFile<span class="o">()</span>
+<span class="w">    </span>files.flatten<span class="o">()</span>.set<span class="w"> </span><span class="o">{</span>input_files<span class="o">}</span>
+<span class="w">    </span>AnalyzeFastqFile<span class="o">(</span>input_files<span class="o">)</span>
 <span class="o">}</span>
 </pre></div>
 
@@ -14784,24 +14785,15 @@ workflow<span class="w"> </span><span class="o">{</span>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The first line of a Nextflow script file is a shebang. It is a special kind of comment used in scripts that tells the system what interpreter to use to execute the script.</p>
-<p>In this case, <code>#!/usr/bin/env nextflow</code> indicates that the script should be run using the <code>nextflow</code> interpreter. The <code>env</code> command is used to find the <code>nextflow</code> interpreter in the system's PATH. If you are using a Nextflow workspace in BRH then this has already been properly set-up. Otherwise refer to <a href="https://www.nextflow.io/docs/latest/getstarted.html">https://www.nextflow.io/docs/latest/getstarted.html</a> .</p>
-
-</div>
-</div>
-</div>
-</div>
-<div id="cell-id=15c2c134-9915-4ee7-b304-66f42c290b1d" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The workflow is the last component of the Nextflow script and consists of the main steps in the workflow:</p>
+<p>The first line of a Nextflow script file is a shebang. It's a special type of comment used in scripts to specify what interpreter should be used to execute the script.</p>
+<p>In this case, <code>#!/usr/bin/env nextflow</code> tells the system to execute the script using the <code>nextflow</code> interpreter. The <code>env</code> command helps locate the <code>nextflow</code> interpreter within the system's PATH. If you are using a Nextflow workspace in BRH, this setup has already been properly done. If not, refer to <a href="https://www.nextflow.io/docs/latest/getstarted.html">https://www.nextflow.io/docs/latest/getstarted.html</a> for setup instructions.</p>
+<p>The workflow is the final component of the Nextflow script and outlines the primary steps in the workflow:</p>
 <ol>
-<li><p><code>file = DownloadFastqFile()</code>: This line calls the <code>DownloadFastqFile</code> process, which is defined earlier in the script (but omitted in the ellipses here for clarity). The result of this process is stored in the variable <code>file</code>.</p>
+<li><p><code>files = DownloadFastqFile()</code>: This line executes the <code>DownloadFastqFile</code> process, which is defined earlier in the script (not shown here for simplicity). The results of this process, which could be multiple files, are stored in the variable <code>files</code>.</p>
 </li>
-<li><p><code>AnalyzeFastqFile(file)</code>: This line calls the <code>AnalyzeFastqFile</code> process, using the input of <code>DownloadFastqFile</code>.</p>
+<li><p><code>files.flatten().set {input_files}</code>: The <code>flatten()</code> operator transforms the nested collection of files into a flat list. This step is necessary if <code>DownloadFastqFile</code> outputs a list of lists of files. This flattened list of files is then converted into a Nextflow channel and stored in <code>input_files</code>. A Nextflow channel is a mechanism that allows data to be passed between processes.</p>
+</li>
+<li><p><code>AnalyzeFastqFile(input_files)</code>: This line calls the <code>AnalyzeFastqFile</code> process, using the output of <code>DownloadFastqFile</code> (the flattened list of files) as input.</p>
 </li>
 </ol>
 
@@ -14829,15 +14821,20 @@ workflow<span class="w"> </span><span class="o">{</span>
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <div class="highlight"><pre><span></span>process<span class="w"> </span>DownloadFastqFile<span class="w"> </span><span class="o">{</span>
 
+<span class="w">    </span>//<span class="w"> </span>Move<span class="w"> </span>the<span class="w"> </span>outputs<span class="w"> </span>of<span class="w"> </span>DownloadFastqFile<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>results<span class="w"> </span>directory<span class="w"> </span><span class="k">in</span>
+<span class="w">    </span>//<span class="w"> </span>the<span class="w"> </span>base<span class="w"> </span>workflow<span class="w"> </span>directory
+
 <span class="w">    </span>conda<span class="w"> </span><span class="s1">&#39;./environment.yml&#39;</span><span class="w"> </span>//<span class="w"> </span>path<span class="w"> </span>to<span class="w"> </span>your<span class="w"> </span>environment.yml<span class="w"> </span>file
 
 <span class="w">    </span>output:
-<span class="w">    </span>path<span class="o">(</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">params</span><span class="p">.fastq_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">)</span>
+<span class="w">    </span>path<span class="o">(</span><span class="s2">&quot;*.fastq&quot;</span><span class="o">)</span>
 
 <span class="w">    </span>script:
 <span class="w">    </span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    gen3 drs-pull object &quot;</span><span class="si">${</span><span class="nv">params</span><span class="p">.fastq_guid</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="s2">    gunzip &quot;</span><span class="si">${</span><span class="nv">params</span><span class="p">.fastq_file</span><span class="si">}</span><span class="s2">&quot;.gz</span>
+<span class="s2">    for file in \$(ls | grep .fastq.gz); do</span>
+<span class="s2">        gunzip &quot;</span><span class="se">\$</span>file<span class="s2">&quot;</span>
+<span class="s2">    done</span>
 <span class="s2">    &quot;&quot;&quot;</span>
 <span class="o">}</span>
 </pre></div>
@@ -14856,9 +14853,9 @@ workflow<span class="w"> </span><span class="o">{</span>
 <ol>
 <li><p><code>conda './environment.yml'</code>: This is an optional line which tells Nextflow to use the conda environment specified in the 'environment.yml' file to run this process (or create it if it doesn't already exist). Conda is a package and environment management system, and using this statement ensures that the correct dependencies are installed and used for this process. It is also possible to specify the conda environment to be used in the <code>nextflow.config</code> file instead (see below for more details on the Nextflow configuration file).</p>
 </li>
-<li><p><code>output: path(&quot;${params.fastq_file}&quot;)</code>: This line specifies what the process will output. In this case, the process outputs the file that was downloaded and whose name is given by the parameter <code>params.fastq_file</code> (the value of this and all other parameters is given in the <code>nextflow.config</code> file. The setup for this file is explained later).</p>
+<li><p><code>output: path(&quot;*.fastq&quot;)</code>: This line specifies what the process will output. In this case, the process outputs one or more fastq files pulled from gen3.</p>
 </li>
-<li><p><code>script:</code>: This begins the section where the commands to be run by this process are defined. In this case the commands are bash script to download the <code>params.fastq_file</code> file from gen3.</p>
+<li><p><code>script:</code>: This begins the section where the commands to be run by this process are defined. In this case the commands are a bash script to download the <code>params.fastq_guid</code> (which is a parameter to the nextflow workflow which is given in the configuration file - more details below) file from gen3 and a loop to go through all the files ending in .fastq.gz that were pulled and unzip them.</p>
 </li>
 </ol>
 
@@ -14948,7 +14945,6 @@ workflow<span class="w"> </span><span class="o">{</span>
 <span class="n">conda</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="n">true</span>
 
 <span class="n">params</span> <span class="p">{</span>
-    <span class="n">fastq_file</span> <span class="o">=</span> <span class="s2">&quot;SRR7012463_1.fastq&quot;</span> <span class="o">//</span> <span class="n">Name</span> <span class="n">of</span> <span class="n">retreived</span> <span class="n">file</span>
     <span class="n">fastq_guid</span> <span class="o">=</span> <span class="s2">&quot;dg.C78ne/4527012c-3a5f-481d-820c-da7b77a26b48&quot;</span> <span class="o">//</span> <span class="n">GUID</span> <span class="k">for</span> <span class="n">fastq</span> <span class="n">file</span>
     <span class="n">max_records</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">//</span> <span class="nb">max</span> <span class="n">records</span> <span class="n">to</span> <span class="n">process</span>
     <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;https://caninedc.org&quot;</span>
@@ -15003,10 +14999,10 @@ workflow<span class="w"> </span><span class="o">{</span>
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>These parameters can be used within the script and can also be overridden when you run the script.</p>
 <p>You can set or override the parameters when you run the script by passing them as command line arguments with the <code>--</code> prefix.</p>
-<p>For example, to run the script with different values for <code>fastq_file</code> and <code>max_records</code>, you would use the following command:</p>
-<div class="highlight"><pre><span></span>nextflow<span class="w"> </span>run<span class="w"> </span>canine.nf<span class="w"> </span>--fastq_file<span class="o">=</span><span class="s2">&quot;NewFile.fastq&quot;</span><span class="w"> </span>--max_records<span class="o">=</span><span class="m">20</span>
+<p>For example, to run the script with different values for <code>refresh_file</code> and <code>max_records</code>, you would use the following command:</p>
+<div class="highlight"><pre><span></span>nextflow<span class="w"> </span>run<span class="w"> </span>canine.nf<span class="w"> </span>--refresh_file<span class="o">=</span><span class="s2">&quot;/home/josh/.gen3/credentials.json&quot;</span><span class="w"> </span>--max_records<span class="o">=</span><span class="m">20</span>
 </pre></div>
-<p><code>nextflow run canine.nf</code> is the ordinary syntax for running the script, <code>NewFile.fastq</code> is the new value for <code>fastq_file</code> and <code>20</code> is the new value for <code>max_records</code>. The <code>fastq_file</code> parameter is accessed in the Nextflow script itself through <code>{params.fastq_file}</code>.</p>
+<p><code>nextflow run canine.nf</code> is the ordinary syntax for running the script, <code>/home/josh/.gen3/credentials.json</code> is the new value for <code>refresh_file</code> and <code>20</code> is the new value for <code>max_records</code>. The <code>max_records</code> parameter is accessed in the Nextflow script itself through <code>{params.max_records}</code>.</p>
 <p>This is one of the features that makes Nextflow powerful for pipeline scripting. By using parameters, the same script can be used with different data or settings without any changes to the script itself.</p>
 
 </div>
@@ -15040,14 +15036,14 @@ workflow<span class="w"> </span><span class="o">{</span>
 <span class="w">    </span>conda<span class="w"> </span><span class="s1">&#39;./environment.yml&#39;</span><span class="w"> </span>//<span class="w"> </span>path<span class="w"> </span>to<span class="w"> </span>your<span class="w"> </span>environment.yml<span class="w"> </span>file
 
 <span class="w">    </span>input:
-<span class="w">    </span>path<span class="o">(</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">params</span><span class="p">.fastq_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">)</span>
+<span class="w">    </span>path<span class="o">(</span>input_file<span class="o">)</span>
 
 <span class="w">    </span>output:
-<span class="w">    </span>path<span class="o">(</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">params</span><span class="p">.fastq_file</span><span class="si">}</span><span class="s2">_analysis.txt&quot;</span><span class="o">)</span>
+<span class="w">    </span>path<span class="o">(</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">input_file</span><span class="si">}</span><span class="s2">_analysis.txt&quot;</span><span class="o">)</span>
 
 <span class="w">    </span>script:
 <span class="w">    </span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    python3 </span><span class="si">${</span><span class="nv">baseDir</span><span class="si">}</span><span class="s2">/analyze_fastq.py </span><span class="si">${</span><span class="nv">params</span><span class="p">.endpoint</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">params</span><span class="p">.refresh_file</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">params</span><span class="p">.fastq_file</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">params</span><span class="p">.max_records</span><span class="si">}</span>
+<span class="s2">    python3 </span><span class="si">${</span><span class="nv">baseDir</span><span class="si">}</span><span class="s2">/analyze_fastq.py </span><span class="si">${</span><span class="nv">params</span><span class="p">.endpoint</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">params</span><span class="p">.refresh_file</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">input_file</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">params</span><span class="p">.max_records</span><span class="si">}</span>
 <span class="s2">    &quot;&quot;&quot;</span>
 <span class="o">}</span>
 </pre></div>
@@ -15063,8 +15059,8 @@ workflow<span class="w"> </span><span class="o">{</span>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>The second process in this workflow takes the file specified by the parameter <code>params.fastq_file</code> and runs the Python script <code>analyze_fastq.py</code> which can be found in the same directory as the Nextflow script (this is indicated by the <code>${baseDir}/</code> before the name of the Python script to be run).</p>
-<p>The <code>analyze_fastq.py</code> script is run with four command-line parameters each of which is specified by one of the parameters specified in the configuration file. The reason that the file needs to be passed as an input to the <code>AnalyzeFastqFile</code> script in addition to being specified as a command-line parameter for the Python script is that specifying the file as an input to the process indicates to Nextflow that that file must be created before this script can be run while feeding the name of the file as a command-line parameter of the Python script indicates to the Python script what file name to use in its analysis.</p>
-<p>Lastly, the AnalyzeFastqFile process also specifies <code>${params.fastq_file}_analysis.txt</code> as the output of the <code>analyze_fastq.py</code>. The actual code to create the file is within the Python script itself but this section indicates to the process to expect a text file named <code>${params.fastq_file}_analysis.txt</code> to be written by the Python script. The line <code>publishDir &quot;${baseDir}/results&quot;, mode: 'copy'</code> indicates for Nextflow to copy the <code>${params.fastq_file}_analysis.txt</code> file produced by this process to the results folder in the same main directory as the Nextflow script (<code>${baseDir}</code>). This line will also automatically create a results folder for the output to be copied into if one doesn't already exist.</p>
+<p>The <code>analyze_fastq.py</code> script is run with four command-line parameters each of which is specified by one of the parameters specified in the configuration file. Nextflow automatically stores the path for the input file to the process inside the input file variable which can then be referenced in the output file name as well as given as a command line parameter to the python script.</p>
+<p>Lastly, the AnalyzeFastqFile process also specifies <code>${input_file}_analysis.txt</code> as the output of the <code>analyze_fastq.py</code>. The actual code to create the file is within the Python script itself but this section indicates to the process to expect a text file named <code>${input_file}_analysis.txt</code> to be written by the Python script. The line <code>publishDir &quot;${baseDir}/results&quot;, mode: 'copy'</code> indicates for Nextflow to copy the <code>${params.fastq_file}_analysis.txt</code> file produced by this process to the results folder in the same main directory as the Nextflow script (<code>${baseDir}</code>). This line will also automatically create a results folder for the output to be copied into if one doesn't already exist.</p>
 
 </div>
 </div>
@@ -15086,11 +15082,11 @@ workflow<span class="w"> </span><span class="o">{</span>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%writefile</span> analyze_fastq.py
-<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">from</span> <span class="nn">gen3.file</span> <span class="kn">import</span> <span class="n">Gen3File</span>
 <span class="kn">from</span> <span class="nn">gen3.query</span> <span class="kn">import</span> <span class="n">Gen3Query</span>
 <span class="kn">from</span> <span class="nn">gen3.auth</span> <span class="kn">import</span> <span class="n">Gen3Auth</span>
@@ -15098,19 +15094,28 @@ workflow<span class="w"> </span><span class="o">{</span>
 <span class="kn">from</span> <span class="nn">gen3.index</span> <span class="kn">import</span> <span class="n">Gen3Index</span>
 <span class="kn">from</span> <span class="nn">bioinfokit.analys</span> <span class="kn">import</span> <span class="n">fastq</span>
 
-<span class="n">endpoint</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">auth</span> <span class="o">=</span> <span class="n">Gen3Auth</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">refresh_file</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="c1"># create the top-level parser</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s1">&#39;analyze_fastq&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;endpoint&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The endpoint.&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;refresh_file&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The refresh file.&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;fastq_file&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The FASTQ file to analyze.&#39;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;record_limit&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The maximum number of records to process.&#39;</span><span class="p">)</span>
+
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+<span class="n">endpoint</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">endpoint</span>
+<span class="n">auth</span> <span class="o">=</span> <span class="n">Gen3Auth</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">refresh_file</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">refresh_file</span><span class="p">)</span>
 <span class="n">sub</span> <span class="o">=</span> <span class="n">Gen3Submission</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
 <span class="n">file</span> <span class="o">=</span> <span class="n">Gen3File</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span>
 
 <span class="n">programs</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">get_programs</span><span class="p">()</span>
 
-<span class="n">records</span> <span class="o">=</span> <span class="n">fastq</span><span class="o">.</span><span class="n">fastq_reader</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">records</span> <span class="o">=</span> <span class="n">fastq</span><span class="o">.</span><span class="n">fastq_reader</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">fastq_file</span><span class="p">)</span>
 <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">output_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_analysis.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+<span class="n">output_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">fastq_file</span> <span class="o">+</span> <span class="s2">&quot;_analysis.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">counter</span> <span class="o">&lt;</span> <span class="nb">float</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">4</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="n">counter</span> <span class="o">&lt;</span> <span class="n">args</span><span class="o">.</span><span class="n">record_limit</span><span class="p">:</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">quality</span> <span class="o">=</span> <span class="n">record</span>
         <span class="n">base_count</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="n">sequence</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">),</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="n">sequence</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">),</span> <span class="s1">&#39;G&#39;</span><span class="p">:</span> <span class="n">sequence</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;G&#39;</span><span class="p">),</span> <span class="s1">&#39;T&#39;</span><span class="p">:</span> <span class="n">sequence</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)}</span>
         <span class="n">output_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sequence</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">quality</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">base_count</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -15153,32 +15158,37 @@ workflow<span class="w"> </span><span class="o">{</span>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>This script, <code>analyze_fastq.py</code>, analyzes a FASTQ file and outputs a textual analysis to a new file. The analysis includes the sequence, quality, and base counts for a certain number of records. The FASTQ file to be analyzed, the number of records to be analyzed, and some additional parameters are passed to the script as command-line arguments.</p>
+<p>This script, <code>analyze_fastq.py</code>, is used to analyze a FASTQ file and create a textual analysis output file. This analysis consists of the sequence, quality, and base counts for a specified number of records. The FASTQ file to be analyzed, the number of records to be analyzed, and a few more parameters are passed to the script as command-line arguments.</p>
+<p>Let's go through the script line by line:</p>
 <ol>
-<li><p><code>import sys</code>: This imports the <code>sys</code> module, which will be used to retrieve command-line arguments.</p>
+<li><p><code>import argparse</code>: This line imports the <code>argparse</code> module, which provides functions to facilitate the parsing of command-line arguments.</p>
 </li>
-<li><p>The script then imports several modules from the <code>gen3</code> and <code>bioinfokit</code> packages, which will be used to interact with a Gen3 data repository and to analyze the FASTQ file, respectively.</p>
+<li><p>The script then imports several modules from the <code>gen3</code> and <code>bioinfokit</code> packages. These packages are used to interact with a Gen3 data repository and analyze the FASTQ file respectively.</p>
 </li>
-<li><p><code>endpoint = sys.argv[1]</code>: This line sets the <code>endpoint</code> variable to the first command-line argument. This is presumably the URL of the Gen3 data repository to be accessed.</p>
+<li><p>The <code>argparse.ArgumentParser</code> function is used to create a parser object. This object will hold all the information necessary to parse the command-line arguments.</p>
 </li>
-<li><p><code>auth = Gen3Auth(endpoint, refresh_file = sys.argv[2])</code>: This line creates a <code>Gen3Auth</code> object, which represents the user's authorization to access the Gen3 data repository. The <code>refresh_file</code> argument is the second command-line argument and should point to a file that contains the user's credentials.</p>
+<li><p><code>parser.add_argument</code> is then used to specify which command-line options the program is expecting. In this case, it is expecting four positional arguments: <code>endpoint</code>, <code>refresh_file</code>, <code>fastq_file</code>, and <code>record_limit</code>.</p>
 </li>
-<li><p><code>sub = Gen3Submission(endpoint, auth)</code>: This line creates a <code>Gen3Submission</code> object, which can be used to submit data to the Gen3 repository.</p>
+<li><p><code>args = parser.parse_args()</code>: This line parses the command-line arguments and returns them as an <code>argparse.Namespace</code> object. The arguments are then accessed as attributes of this object.</p>
 </li>
-<li><p><code>file = Gen3File(endpoint, auth)</code>: This line creates a <code>Gen3File</code> object, which represents the file to be analyzed.</p>
+<li><p><code>auth = Gen3Auth(endpoint, refresh_file=args.refresh_file)</code>: This line creates a <code>Gen3Auth</code> object. This represents the user's authorization to access the Gen3 data repository. The <code>refresh_file</code> argument should point to a file containing the user's credentials.</p>
 </li>
-<li><p><code>programs = sub.get_programs()</code>: This line gets a list of programs from the Gen3 repository. By printing the <code>programs</code> variable one can see the programs under the main repository umbrella.</p>
+<li><p><code>sub = Gen3Submission(endpoint, auth)</code>: This line creates a <code>Gen3Submission</code> object which can be used to submit data to the Gen3 repository.</p>
 </li>
-<li><p><code>records = fastq.fastq_reader(file=sys.argv[3])</code>: This line reads the records from the FASTQ file, which is the third command-line argument.</p>
+<li><p><code>file = Gen3File(endpoint, auth)</code>: This line creates a <code>Gen3File</code> object, representing the file to be analyzed.</p>
 </li>
-<li><p>The <code>counter</code> variable is initialized to zero, and <code>output_file</code> is opened for writing. The output file's name is the same as the input FASTQ file with &quot;_analysis.txt&quot; appended to it.</p>
+<li><p><code>programs = sub.get_programs()</code>: This line gets a list of programs from the Gen3 repository.</p>
 </li>
-<li><p>In the for loop, the script iterates over the FASTQ records. For each record, it splits the record into its sequence and quality components. It then counts the number of each base (A, C, G, T) in the sequence. This information is written to the output file. The loop stops when the number of processed records equals the fourth command-line argument (<code>sys.argv[4]</code>).</p>
+<li><p><code>records = fastq.fastq_reader(file=args.fastq_file)</code>: This line reads the records from the FASTQ file, which is one of the command-line arguments.</p>
+</li>
+<li><p>An output file is opened for writing. The output file's name is the same as the input FASTQ file, with &quot;_analysis.txt&quot; appended to it.</p>
+</li>
+<li><p>The script then enters a for loop, iterating over the FASTQ records. For each record, it splits the record into its sequence and quality components. It then counts the number of each base (A, C, G, T) in the sequence. This information is written to the output file. The loop stops when the number of processed records equals the <code>record_limit</code> argument.</p>
 </li>
 <li><p><code>output_file.close()</code>: Finally, the script closes the output file.</p>
 </li>
 </ol>
-<p>So, in summary, this script (and consequently the <code>AnalyzeFastqFile</code> process which calls it) reads a FASTQ file, analyzes the sequence and quality of a certain number of records, and writes the results to a new file.</p>
+<p>In summary, this script (and by extension, the <code>AnalyzeFastqFile</code> process which calls it) reads a FASTQ file, analyzes the sequence and quality of a certain number of records, and writes the results to a new file.</p>
 
 </div>
 </div>
@@ -15200,7 +15210,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[14]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%writefile</span> canine.nf
@@ -15210,18 +15220,21 @@ workflow<span class="w"> </span><span class="o">{</span>
 
     <span class="o">//</span> <span class="n">Move</span> <span class="n">the</span> <span class="n">outputs</span> <span class="n">of</span> <span class="n">DownloadFastqFile</span> <span class="n">to</span> <span class="n">the</span> <span class="n">results</span> <span class="n">directory</span> <span class="ow">in</span>
     <span class="o">//</span> <span class="n">the</span> <span class="n">base</span> <span class="n">workflow</span> <span class="n">directory</span>
-    
+
     <span class="n">conda</span> <span class="s1">&#39;./environment.yml&#39;</span> <span class="o">//</span> <span class="n">path</span> <span class="n">to</span> <span class="n">your</span> <span class="n">environment</span><span class="o">.</span><span class="n">yml</span> <span class="n">file</span>
 
     <span class="n">output</span><span class="p">:</span>
-    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;$</span><span class="si">{params.fastq_file}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;*.fastq&quot;</span><span class="p">)</span>
 
     <span class="n">script</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    gen3 drs-pull object &quot;${params.fastq_guid}&quot;</span>
-<span class="sd">    gunzip &quot;${params.fastq_file}&quot;.gz</span>
+<span class="sd">    for file in \$(ls | grep .fastq.gz); do</span>
+<span class="sd">        gunzip &quot;\$file&quot;</span>
+<span class="sd">    done</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <span class="p">}</span>
+
 
 <span class="n">process</span> <span class="n">AnalyzeFastqFile</span> <span class="p">{</span>
 
@@ -15232,20 +15245,21 @@ workflow<span class="w"> </span><span class="o">{</span>
     <span class="n">conda</span> <span class="s1">&#39;./environment.yml&#39;</span> <span class="o">//</span> <span class="n">path</span> <span class="n">to</span> <span class="n">your</span> <span class="n">environment</span><span class="o">.</span><span class="n">yml</span> <span class="n">file</span>
 
     <span class="nb">input</span><span class="p">:</span>
-    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;$</span><span class="si">{params.fastq_file}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">path</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
 
     <span class="n">output</span><span class="p">:</span>
-    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;$</span><span class="si">{params.fastq_file}</span><span class="s2">_analysis.txt&quot;</span><span class="p">)</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;$</span><span class="si">{input_file}</span><span class="s2">_analysis.txt&quot;</span><span class="p">)</span>
 
     <span class="n">script</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    python3 ${baseDir}/analyze_fastq.py ${params.endpoint} ${params.refresh_file} ${params.fastq_file} ${params.max_records}</span>
+<span class="sd">    python3 ${baseDir}/analyze_fastq.py ${params.endpoint} ${params.refresh_file} ${input_file} ${params.max_records}</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <span class="p">}</span>
 
 <span class="n">workflow</span> <span class="p">{</span>
-    <span class="n">file</span> <span class="o">=</span> <span class="n">DownloadFastqFile</span><span class="p">()</span>
-    <span class="n">AnalyzeFastqFile</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="n">DownloadFastqFile</span><span class="p">()</span>
+    <span class="n">files</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">.</span><span class="n">set</span> <span class="p">{</span><span class="n">input_files</span><span class="p">}</span>
+    <span class="n">AnalyzeFastqFile</span><span class="p">(</span><span class="n">input_files</span><span class="p">)</span>
 <span class="p">}</span>
 </pre></div>
 
@@ -15266,7 +15280,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Writing canine.nf
+<pre>Overwriting canine.nf
 </pre>
 </div>
 </div>
@@ -15315,7 +15329,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>nextflow<span class="w"> </span>run<span class="w"> </span>canine.nf<span class="w"> </span>--resume
@@ -15339,42 +15353,27 @@ workflow<span class="w"> </span><span class="o">{</span>
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>N E X T F L O W  ~  version 22.10.6
-Launching `canine.nf` [exotic_waddington] DSL2 - revision: a33c65c746
-[3.042s][warning][jni,resolve] Re-registering of platform native method: java.lang.PanwHooksNs.HookArgs0()V from code in a different classloader
-[3.042s][warning][jni,resolve] Re-registering of platform native method: java.lang.PanwHooksNs.HookArgs1(Ljava/lang/Object;)V from code in a different classloader
-[3.042s][warning][jni,resolve] Re-registering of platform native method: java.lang.PanwHooksNs.HookArgs2(Ljava/lang/Object;Ljava/lang/Object;)V from code in a different classloader
-[3.042s][warning][jni,resolve] Re-registering of platform native method: java.lang.PanwHooksNs.HookArgs3(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V from code in a different classloader
-[3.042s][warning][jni,resolve] Re-registering of platform native method: java.lang.PanwHooksNs.HookArgs4(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V from code in a different classloader
+Launching `canine.nf` [disturbed_shaw] DSL2 - revision: 660eb25521
 [-        ] process &gt; DownloadFastqFile -
 [-        ] process &gt; AnalyzeFastqFile  -
-
-[-        ] process &gt; DownloadFastqFile -
-[-        ] process &gt; AnalyzeFastqFile  -
-Creating env using conda: ./environment.yml [cache /home/jovyan/work/conda/canine-99179bc49932240ebc733d72b9f23f31]
 
 executor &gt;  local (1)
-[2c/d4c3d6] process &gt; DownloadFastqFile [  0%] 0 of 1
+[e9/35102a] process &gt; DownloadFastqFile [  0%] 0 of 1
 [-        ] process &gt; AnalyzeFastqFile  -
 
+executor &gt;  local (1)
+[e9/35102a] process &gt; DownloadFastqFile [100%] 1 of 1 ✔
+[-        ] process &gt; AnalyzeFastqFile  -
 
 executor &gt;  local (2)
-[2c/d4c3d6] process &gt; DownloadFastqFile [100%] 1 of 1 ✔
-[15/19764f] process &gt; AnalyzeFastqFile  [  0%] 0 of 1
-
-
-executor &gt;  local (2)
-[2c/d4c3d6] process &gt; DownloadFastqFile [100%] 1 of 1 ✔
-[15/19764f] process &gt; AnalyzeFastqFile  [  0%] 0 of 1
+[e9/35102a] process &gt; DownloadFastqFile    [100%] 1 of 1 ✔
+[b0/8d9193] process &gt; AnalyzeFastqFile (1) [  0%] 0 of 1
 
 executor &gt;  local (2)
-[2c/d4c3d6] process &gt; DownloadFastqFile [100%] 1 of 1 ✔
-[15/19764f] process &gt; AnalyzeFastqFile  [  0%] 0 of 1 ✔
-
-executor &gt;  local (2)
-[2c/d4c3d6] process &gt; DownloadFastqFile [100%] 1 of 1 ✔
-[15/19764f] process &gt; AnalyzeFastqFile  [100%] 1 of 1 ✔
-<span class="ansi-green-intense-fg ansi-bold">Completed at: 05-Jul-2023 18:47:51
-Duration    : 4m 49s
+[e9/35102a] process &gt; DownloadFastqFile    [100%] 1 of 1 ✔
+[b0/8d9193] process &gt; AnalyzeFastqFile (1) [100%] 1 of 1 ✔
+<span class="ansi-green-intense-fg ansi-bold">Completed at: 24-Jul-2023 17:38:55
+Duration    : 1m 10s
 CPU hours   : (a few seconds)
 Succeeded   : 2
 </span>
