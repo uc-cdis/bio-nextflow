@@ -14697,7 +14697,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>While a process defines what command or script should be run, the executor determines how that script is run on the target platform. Unless specified otherwise, processes are run on your local computer.</p>
-<p>However, for real-world workflows, high-performance computing (HPC) or a cloud platform is often needed. Nextflow provides a separation between the logic of the workflow and the system on which it runs. This means you can create a workflow that runs on your computer, a server, or the cloud, without needing any changes. You just need to define the target platform in the configuration file.</p>
+<p>However, for real-world workflows, a cloud platform is often needed. Nextflow provides a separation between the logic of the workflow and the system on which it runs. This means you can create a workflow that runs on your computer, a server, or the cloud, without needing any changes. You just need to define the target platform in the configuration file.</p>
 
 </div>
 </div>
@@ -14890,7 +14890,7 @@ workflow<span class="w"> </span><span class="o">{</span>
   <span class="o">-</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span>
   <span class="o">-</span> <span class="n">pip</span>
   <span class="o">-</span> <span class="n">pip</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">gen3</span><span class="o">==</span><span class="mf">4.13.0</span>
+    <span class="o">-</span> <span class="n">gen3</span>
     <span class="o">-</span> <span class="n">bioinfokit</span>
 </pre></div>
 
@@ -15082,7 +15082,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%writefile</span> analyze_fastq.py
@@ -15210,7 +15210,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[14]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%writefile</span> canine.nf
@@ -15280,7 +15280,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Overwriting canine.nf
+<pre>Writing canine.nf
 </pre>
 </div>
 </div>
@@ -15329,7 +15329,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[15]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>nextflow<span class="w"> </span>run<span class="w"> </span>canine.nf<span class="w"> </span>--resume
@@ -15353,27 +15353,29 @@ workflow<span class="w"> </span><span class="o">{</span>
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>N E X T F L O W  ~  version 22.10.6
-Launching `canine.nf` [disturbed_shaw] DSL2 - revision: 660eb25521
+Launching `canine.nf` [voluminous_spence] DSL2 - revision: 660eb25521
 [-        ] process &gt; DownloadFastqFile -
+
+[-        ] process &gt; DownloadFastqFile [  0%] 0 of 1
 [-        ] process &gt; AnalyzeFastqFile  -
 
 executor &gt;  local (1)
-[e9/35102a] process &gt; DownloadFastqFile [  0%] 0 of 1
+[4e/d145d9] process &gt; DownloadFastqFile [  0%] 0 of 1
 [-        ] process &gt; AnalyzeFastqFile  -
 
 executor &gt;  local (1)
-[e9/35102a] process &gt; DownloadFastqFile [100%] 1 of 1 ✔
+[4e/d145d9] process &gt; DownloadFastqFile [100%] 1 of 1 ✔
 [-        ] process &gt; AnalyzeFastqFile  -
 
 executor &gt;  local (2)
-[e9/35102a] process &gt; DownloadFastqFile    [100%] 1 of 1 ✔
-[b0/8d9193] process &gt; AnalyzeFastqFile (1) [  0%] 0 of 1
+[4e/d145d9] process &gt; DownloadFastqFile    [100%] 1 of 1 ✔
+[06/2b42a8] process &gt; AnalyzeFastqFile (1) [  0%] 0 of 1
 
 executor &gt;  local (2)
-[e9/35102a] process &gt; DownloadFastqFile    [100%] 1 of 1 ✔
-[b0/8d9193] process &gt; AnalyzeFastqFile (1) [100%] 1 of 1 ✔
-<span class="ansi-green-intense-fg ansi-bold">Completed at: 24-Jul-2023 17:38:55
-Duration    : 1m 10s
+[4e/d145d9] process &gt; DownloadFastqFile    [100%] 1 of 1 ✔
+[06/2b42a8] process &gt; AnalyzeFastqFile (1) [100%] 1 of 1 ✔
+<span class="ansi-green-intense-fg ansi-bold">Completed at: 25-Jul-2023 19:43:57
+Duration    : 1m 13s
 CPU hours   : (a few seconds)
 Succeeded   : 2
 </span>
