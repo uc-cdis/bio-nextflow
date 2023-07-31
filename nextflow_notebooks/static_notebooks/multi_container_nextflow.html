@@ -3,7 +3,7 @@
 <head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>multi_container_tutorial</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>multi_container_nextflow_tutorial</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 
 
@@ -14621,7 +14621,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>In this notebook, we will set up and explain each file in a Nextflow workflow which uses Python scripts. Our workflow consists of two Python scripts that are each executed in a different Conda environment.</p>
 <p>The workflow consists of several components: the main Nextflow script (<code>main.nf</code>), two Python scripts (<code>script1.py</code> and <code>script2.py</code>), two Conda environment files (<code>env1.yaml</code> and <code>env2.yaml</code>), and a Nextflow configuration file (<code>nextflow.config</code>).</p>
-<p>We will explain each file in the following sections. We will also show how to create the files and directories necessary for this workflow in a Jupyter notebook using the <code>%%writefile</code> magic command.</p>
+<p>We will explain each file in the following sections. We will also show how to create the files and directories necessary for this workflow using the <code>%%writefile</code> magic command.</p>
 
 </div>
 </div>
@@ -14654,20 +14654,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 </div>
 </div>
-</div>
-<div id="cell-id=06a2dce8-9e52-4fb3-8e3c-f772a44e1848" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>This command uses the mkdir (make directory) command from Unix. The <code>-p</code> flag is used to create parent directories as needed. So, if the directory we're trying to create is nested inside another directory that doesn't exist yet, mkdir -p will create the parent directory as well.</p>
-<p>The <code>!</code> at the beginning of the command is a special Jupyter feature that allows us to run shell commands directly from the notebook.</p>
-
-</div>
-</div>
-</div>
-</div><div id="cell-id=3b31a159-3ce9-441b-ac0f-ba69b02a0006" class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div id="cell-id=a7b004ec-87b8-4467-a4ef-15364646fdcb" class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -14683,6 +14670,18 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 </div>
 
+</div>
+<div id="cell-id=06a2dce8-9e52-4fb3-8e3c-f772a44e1848" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>This command uses the mkdir (make directory) command from Unix. The <code>!</code> at the beginning of the command is a special Jupyter feature that allows us to run shell commands directly from the notebook.</p>
+
+</div>
+</div>
+</div>
 </div>
 <div id="cell-id=15d943d9-3102-442d-a1e2-df21d4f5dc32" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper">
@@ -14732,8 +14731,8 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <span class="n">channels</span><span class="p">:</span>
   <span class="o">-</span> <span class="n">defaults</span>
 <span class="n">dependencies</span><span class="p">:</span>
-  <span class="o">-</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.8</span>
-  <span class="o">-</span> <span class="n">numpy</span><span class="o">=</span><span class="mf">1.18.1</span>
+  <span class="o">-</span> <span class="n">python</span>
+  <span class="o">-</span> <span class="n">numpy</span>
 </pre></div>
 
      </div>
@@ -14753,7 +14752,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Writing envs/env1.yaml
+<pre>Overwriting envs/env1.yaml
 </pre>
 </div>
 </div>
@@ -14788,8 +14787,8 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <span class="n">channels</span><span class="p">:</span>
   <span class="o">-</span> <span class="n">defaults</span>
 <span class="n">dependencies</span><span class="p">:</span>
-  <span class="o">-</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.7</span>
-  <span class="o">-</span> <span class="n">pandas</span><span class="o">=</span><span class="mf">1.0.1</span>
+  <span class="o">-</span> <span class="n">python</span>
+  <span class="o">-</span> <span class="n">pandas</span>
 </pre></div>
 
      </div>
@@ -14809,7 +14808,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Writing envs/env2.yaml
+<pre>Overwriting envs/env2.yaml
 </pre>
 </div>
 </div>
@@ -14909,7 +14908,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>In <code>script2.py</code>, we import the pandas library, create a pandas DataFrame, calculate basic statistical details like percentile, mean, and std for numerical values using the describe method, and then write the result to a file named <code>results_script2.txt</code>.</p>
+<p>In <code>script2.py</code>, we import the pandas library, create a pandas DataFrame, calculate basic statistical details like percentile, mean, and standard deviation using the describe method, and then write the result to a file named <code>results_script2.txt</code>.</p>
 
 </div>
 </div>
@@ -14987,8 +14986,6 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>The Nextflow configuration provides specifications for how to run the main Nextflow file:</p>
 <ul>
-<li><p><code>profiles</code>: This keyword is used to define configuration profiles. These allow you to keep multiple configurations for different execution requirements or environments, and select between them when running the pipeline. In this case, we've created one profile named <code>standard</code>.</p>
-</li>
 <li><p><code>process</code>: This keyword is used to define process-specific configurations.</p>
 </li>
 <li><p><code>withName: SCRIPT1</code> and <code>withName: SCRIPT2</code>: These specify configurations for each of our processes, which we've named <code>SCRIPT1</code> and <code>SCRIPT2</code>. <code>withName</code> is used to apply configurations to specific processes by name.</p>
@@ -15005,7 +15002,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%writefile</span> nextflow.config
@@ -15067,8 +15064,6 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <p>The last component of the workflow is the main Nextflow script with the following parts:</p>
 <ul>
 <li><p><code>process SCRIPT1</code> and <code>process SCRIPT2</code>: These lines define the two processes that our workflow will execute. Each process represents a computational task in our workflow. In this case, our tasks are running the two Python scripts.</p>
-</li>
-<li><p><code>label 'script1'</code> and <code>label 'script2'</code>: These lines assign labels to the processes, which can be used to apply specific configurations from the <code>nextflow.config</code> file to these processes.</p>
 </li>
 <li><p><code>publishDir &quot;${baseDir}/results&quot;, mode: 'copy'</code>: This directive tells Nextflow to copy the outputs of the process to the <code>results</code> directory located in the base directory of the project.</p>
 </li>
@@ -15140,7 +15135,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Writing main.nf
+<pre>Overwriting main.nf
 </pre>
 </div>
 </div>
@@ -15165,7 +15160,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>nextflow<span class="w"> </span>run<span class="w"> </span>main.nf
@@ -15188,26 +15183,26 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>N E X T F L O W  ~  version 23.04.2
-Launching `main.nf` [shrivelled_carlsson] DSL2 - revision: 161ca7a2b7
+<pre>N E X T F L O W  ~  version 22.10.6
+Launching `main.nf` [zen_coulomb] DSL2 - revision: 161ca7a2b7
 [-        ] process &gt; SCRIPT1 -
 [-        ] process &gt; SCRIPT2 -
 
 executor &gt;  local (2)
-[06/a925df] process &gt; SCRIPT1 [  0%] 0 of 1
-[b7/3a3d72] process &gt; SCRIPT2 [  0%] 0 of 1
+[6f/5e6fe7] process &gt; SCRIPT1 [  0%] 0 of 1
+[b4/aaaed9] process &gt; SCRIPT2 [  0%] 0 of 1
 
 executor &gt;  local (2)
-[06/a925df] process &gt; SCRIPT1 [100%] 1 of 1 ✔
-[b7/3a3d72] process &gt; SCRIPT2 [  0%] 0 of 1
+[6f/5e6fe7] process &gt; SCRIPT1 [  0%] 0 of 1
+[b4/aaaed9] process &gt; SCRIPT2 [  0%] 0 of 1
 
 executor &gt;  local (2)
-[06/a925df] process &gt; SCRIPT1 [100%] 1 of 1 ✔
-[b7/3a3d72] process &gt; SCRIPT2 [100%] 1 of 1 ✔
+[6f/5e6fe7] process &gt; SCRIPT1 [100%] 1 of 1 ✔
+[b4/aaaed9] process &gt; SCRIPT2 [  0%] 0 of 1
 
 executor &gt;  local (2)
-[06/a925df] process &gt; SCRIPT1 [100%] 1 of 1 ✔
-[b7/3a3d72] process &gt; SCRIPT2 [100%] 1 of 1 ✔
+[6f/5e6fe7] process &gt; SCRIPT1 [100%] 1 of 1 ✔
+[b4/aaaed9] process &gt; SCRIPT2 [100%] 1 of 1 ✔
 
 </pre>
 </div>
@@ -15224,7 +15219,7 @@ executor &gt;  local (2)
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>When this command is run, Nextflow will execute our workflow using the settings in the <code>standard</code> profile of the <code>nextflow.config</code> file. It will create and activate the Conda environments specified in <code>env1.yaml</code> and <code>env2.yaml</code>, run <code>script1.py</code> in <code>env1</code> and <code>script2.py</code> in <code>env2</code>, and then copy the outputs to the <code>results</code> directory.</p>
+<p>When this command is run, Nextflow will execute our workflow. It will create and activate the Conda environments specified in <code>env1.yaml</code> and <code>env2.yaml</code>, run <code>script1.py</code> in <code>env1</code> and <code>script2.py</code> in <code>env2</code>, and then copy the outputs to the <code>results</code> directory.</p>
 
 </div>
 </div>
