@@ -3,7 +3,7 @@
 <head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>multi_container_nextflow_tutorial</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>multi_container_nextflow</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 
 
@@ -14892,7 +14892,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Writing scripts/script1.py
+<pre>Overwriting scripts/script1.py
 </pre>
 </div>
 </div>
@@ -14957,7 +14957,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Writing scripts/script2.py
+<pre>Overwriting scripts/script2.py
 </pre>
 </div>
 </div>
@@ -15096,7 +15096,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
     <span class="n">script</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    python ${baseDir}/scripts/script1.py</span>
+<span class="sd">    python3 ${baseDir}/scripts/script1.py</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <span class="p">}</span>
 
@@ -15108,7 +15108,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
     <span class="n">script</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    python ${baseDir}/scripts/script2.py</span>
+<span class="sd">    python3 ${baseDir}/scripts/script2.py</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <span class="p">}</span>
 
@@ -15160,7 +15160,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>nextflow<span class="w"> </span>run<span class="w"> </span>main.nf
@@ -15184,26 +15184,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>N E X T F L O W  ~  version 22.10.6
-Launching `main.nf` [zen_coulomb] DSL2 - revision: 161ca7a2b7
-[-        ] process &gt; SCRIPT1 -
-[-        ] process &gt; SCRIPT2 -
-
-executor &gt;  local (2)
-[6f/5e6fe7] process &gt; SCRIPT1 [  0%] 0 of 1
-[b4/aaaed9] process &gt; SCRIPT2 [  0%] 0 of 1
-
-executor &gt;  local (2)
-[6f/5e6fe7] process &gt; SCRIPT1 [  0%] 0 of 1
-[b4/aaaed9] process &gt; SCRIPT2 [  0%] 0 of 1
-
-executor &gt;  local (2)
-[6f/5e6fe7] process &gt; SCRIPT1 [100%] 1 of 1 ✔
-[b4/aaaed9] process &gt; SCRIPT2 [  0%] 0 of 1
-
-executor &gt;  local (2)
-[6f/5e6fe7] process &gt; SCRIPT1 [100%] 1 of 1 ✔
-[b4/aaaed9] process &gt; SCRIPT2 [100%] 1 of 1 ✔
-
+Launching `main.nf` [reverent_golick] DSL2 - revision: 7e1971871e
 </pre>
 </div>
 </div>
