@@ -3,7 +3,7 @@
 <head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>canine_datacommons_fastq_reader_nextflow</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>canine_datacommons_fastq_reader_nextflow_tutorial</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 
 
@@ -14643,7 +14643,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Nextflow is a tool that helps to easily create workflows for data-heavy computations. It's built around the idea that Linux, with its many command-line and scripting tools, can be used to create data science pipelines.</p>
+<p>Nextflow is a tool that helps to easily create workflows for data-heavy computations. It's built around the idea that Linux, with its many command-line and scripting tools, can be used as a language to create data science pipelines.</p>
 <p>Nextflow allows you to define complex interactions between programming languages and gives you a sophisticated parallel computing environment in which to write pipelines (termed workflows). It's key features include:</p>
 <ul>
 <li>Workflow portability and reproducibility</li>
@@ -14787,11 +14787,11 @@ workflow<span class="w"> </span><span class="o">{</span>
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>The first line of a Nextflow script file is a shebang. It's a special type of comment used in scripts to specify what interpreter should be used to execute the script.</p>
 <p>In this case, <code>#!/usr/bin/env nextflow</code> tells the system to execute the script using the <code>nextflow</code> interpreter. The <code>env</code> command helps locate the <code>nextflow</code> interpreter within the system's PATH. If you are using a Nextflow workspace in BRH, this setup has already been properly done. If not, refer to <a href="https://www.nextflow.io/docs/latest/getstarted.html">https://www.nextflow.io/docs/latest/getstarted.html</a> for setup instructions.</p>
-<p>The workflow is the final component of the Nextflow script and outlines the primary steps in the workflow:</p>
+<p>The workflow is the final component of the Nextflow script and outlines the primary steps in the pipeline:</p>
 <ol>
 <li><p><code>files = DownloadFastqFile()</code>: This line executes the <code>DownloadFastqFile</code> process, which is defined earlier in the script (not shown here for simplicity). The results of this process, which could be multiple files, are stored in the variable <code>files</code>.</p>
 </li>
-<li><p><code>files.flatten().set {input_files}</code>: The <code>flatten()</code> operator transforms the nested collection of files into a flat list. This step is necessary if <code>DownloadFastqFile</code> outputs a list of lists of files. This flattened list of files is then converted into a Nextflow channel and stored in <code>input_files</code>. A Nextflow channel is a mechanism that allows data to be passed between processes.</p>
+<li><p><code>files.flatten().set {input_files}</code>: The <code>flatten()</code> operator transforms the nested collection of files into a flat list (where each file can then be fed independently into the next process). This flattened list of files is then converted into a Nextflow channel and stored in <code>input_files</code>. A Nextflow channel is a mechanism that allows data to be passed between processes.</p>
 </li>
 <li><p><code>AnalyzeFastqFile(input_files)</code>: This line calls the <code>AnalyzeFastqFile</code> process, using the output of <code>DownloadFastqFile</code> (the flattened list of files) as input.</p>
 </li>
@@ -14853,7 +14853,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 <ol>
 <li><p><code>conda './environment.yml'</code>: This is an optional line which tells Nextflow to use the conda environment specified in the 'environment.yml' file to run this process (or create it if it doesn't already exist). Conda is a package and environment management system, and using this statement ensures that the correct dependencies are installed and used for this process. It is also possible to specify the conda environment to be used in the <code>nextflow.config</code> file instead (see below for more details on the Nextflow configuration file).</p>
 </li>
-<li><p><code>output: path(&quot;*.fastq&quot;)</code>: This line specifies what the process will output. In this case, the process outputs one or more fastq files pulled from gen3.</p>
+<li><p><code>output: path(&quot;*.fastq&quot;)</code>: This line specifies what the process will output. In this case, the process outputs one or more fastq files pulled from gen3. Since <code>*</code> is used in the filename Nextflow will take any files outputted by this process which end in .fastq as the outputs of the process.</p>
 </li>
 <li><p><code>script:</code>: This begins the section where the commands to be run by this process are defined. In this case the commands are a bash script to download the <code>params.fastq_guid</code> (which is a parameter to the nextflow workflow which is given in the configuration file - more details below) file from gen3 and a loop to go through all the files ending in .fastq.gz that were pulled and unzip them.</p>
 </li>
@@ -14890,7 +14890,7 @@ workflow<span class="w"> </span><span class="o">{</span>
   <span class="o">-</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span>
   <span class="o">-</span> <span class="n">pip</span>
   <span class="o">-</span> <span class="n">pip</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">gen3</span>
+    <span class="o">-</span> <span class="n">gen3</span><span class="o">==</span><span class="mf">4.20</span>
     <span class="o">-</span> <span class="n">bioinfokit</span>
 </pre></div>
 
@@ -14911,7 +14911,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Writing environment.yml
+<pre>Overwriting environment.yml
 </pre>
 </div>
 </div>
@@ -14950,6 +14950,15 @@ workflow<span class="w"> </span><span class="o">{</span>
     <span class="n">endpoint</span> <span class="o">=</span> <span class="s2">&quot;https://caninedc.org&quot;</span>
     <span class="n">refresh_file</span> <span class="o">=</span> <span class="s2">&quot;/home/jovyan/.gen3/credentials.json&quot;</span>
 <span class="p">}</span>
+
+<span class="n">process</span> <span class="p">{</span>
+    <span class="n">conda</span> <span class="p">{</span>
+        <span class="n">envCreate</span> <span class="o">=</span> <span class="n">true</span>
+        <span class="n">envName</span> <span class="o">=</span> <span class="s1">&#39;canine&#39;</span>
+        <span class="o">//</span> <span class="n">If</span> <span class="n">the</span> <span class="n">environment</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">exist</span><span class="p">,</span> <span class="n">Nextflow</span> <span class="n">will</span> <span class="n">create</span> <span class="n">it</span> <span class="n">using</span> <span class="n">the</span> <span class="n">specified</span> <span class="n">YAML</span> <span class="n">file</span>
+        <span class="n">envFile</span> <span class="o">=</span> <span class="s1">&#39;environment.yml&#39;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 
      </div>
@@ -14969,7 +14978,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Writing nextflow.config
+<pre>Overwriting nextflow.config
 </pre>
 </div>
 </div>
@@ -15142,7 +15151,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Writing analyze_fastq.py
+<pre>Overwriting analyze_fastq.py
 </pre>
 </div>
 </div>
@@ -15280,7 +15289,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Writing canine.nf
+<pre>Overwriting canine.nf
 </pre>
 </div>
 </div>
@@ -15301,6 +15310,306 @@ workflow<span class="w"> </span><span class="o">{</span>
 </div>
 </div>
 </div>
+</div>
+<div id="cell-id=9dcdaac5-2b7b-4c5c-bd1c-e088658e6787" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Nextflow can create the conda environment if it doesn't already exist before running but doing so can obscur any errors that may be encountered in the environment creation process. To simplify this, we here first create the Conda environment and subsequently run the Nextflow workflow. Creating the Conda environment for the first time may take 5 or more minutes (though the time required is quite variable). This line will produce an error if it is run when a conda environment named <code>canine</code> already exists (such as if this line is run more than once). In that case running the command <code>conda remove --name canine --all</code> in the terminal will remove the pre-existing conda environment so a new one can be created. If you are in the BRH workspaces, a terminal may be opened by going to <code>File -&gt; New -&gt; Terminal</code>. If you are running this notebook more than once the correct conda environment will already exist after the first time it is created so this line need not be run more than once.</p>
+
+</div>
+</div>
+</div>
+</div><div id="cell-id=46b58501-7ef8-4afd-8326-5ffc6073691d" class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>canine<span class="w"> </span>--file<span class="o">=</span>environment.yml
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>Collecting package metadata (repodata.json): done
+Solving environment: done
+
+
+==&gt; WARNING: A newer version of conda exists. &lt;==
+  current version: 23.1.0
+  latest version: 23.7.2
+
+Please update conda by running
+
+    $ conda update -n base -c conda-forge conda
+
+Or to minimize the number of packages updated during conda update use
+
+     conda install conda=23.7.2
+
+
+
+Downloading and Extracting Packages
+
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+Installing pip dependencies: \ Ran pip subprocess with arguments:
+[&#39;/opt/conda/envs/canine/bin/python&#39;, &#39;-m&#39;, &#39;pip&#39;, &#39;install&#39;, &#39;-U&#39;, &#39;-r&#39;, &#39;/home/jovyan/condaenv.u83xlnk2.requirements.txt&#39;, &#39;--exists-action=b&#39;]
+Pip subprocess output:
+Collecting gen3==4.20 (from -r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for gen3==4.20 from https://files.pythonhosted.org/packages/72/9f/2d45202bcb1262e78f7a724f3483b598dcdda37bec9fee66236c5114f6f1/gen3-4.20.0-py3-none-any.whl.metadata
+  Using cached gen3-4.20.0-py3-none-any.whl.metadata (1.3 kB)
+Collecting bioinfokit (from -r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Using cached bioinfokit-2.1.1-py3-none-any.whl
+Collecting aiofiles&lt;0.9.0,&gt;=0.8.0 (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached aiofiles-0.8.0-py3-none-any.whl (13 kB)
+Collecting aiohttp (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for aiohttp from https://files.pythonhosted.org/packages/5b/8d/821fcb268cfc056964a75da3823896b17eabaa4968a2414121bc93b0c501/aiohttp-3.8.5-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
+  Using cached aiohttp-3.8.5-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.7 kB)
+Collecting backoff (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached backoff-2.2.1-py3-none-any.whl (15 kB)
+Collecting cdislogging&lt;2.0.0,&gt;=1.1.0 (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached cdislogging-1.1.1-py3-none-any.whl
+Collecting click (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for click from https://files.pythonhosted.org/packages/1a/70/e63223f8116931d365993d4a6b7ef653a4d920b41d03de7c59499962821f/click-8.1.6-py3-none-any.whl.metadata
+  Using cached click-8.1.6-py3-none-any.whl.metadata (3.0 kB)
+Collecting dataclasses-json (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for dataclasses-json from https://files.pythonhosted.org/packages/97/5f/e7cc90f36152810cab08b6c9c1125e8bcb9d76f8b3018d101b5f877b386c/dataclasses_json-0.5.14-py3-none-any.whl.metadata
+  Using cached dataclasses_json-0.5.14-py3-none-any.whl.metadata (22 kB)
+Collecting drsclient&lt;0.3.0,&gt;=0.2.2 (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached drsclient-0.2.3-py3-none-any.whl
+Collecting httpx (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for httpx from https://files.pythonhosted.org/packages/ec/91/e41f64f03d2a13aee7e8c819d82ee3aa7cdc484d18c0ae859742597d5aa0/httpx-0.24.1-py3-none-any.whl.metadata
+  Using cached httpx-0.24.1-py3-none-any.whl.metadata (7.4 kB)
+Collecting humanfriendly (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached humanfriendly-10.0-py2.py3-none-any.whl (86 kB)
+Collecting indexclient (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached indexclient-2.2.1-py3-none-any.whl
+Collecting jsonschema (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for jsonschema from https://files.pythonhosted.org/packages/a1/ba/28ce987450c6afa8336373761193ddaadc1ba2004fbf23a6407db036f558/jsonschema-4.18.4-py3-none-any.whl.metadata
+  Using cached jsonschema-4.18.4-py3-none-any.whl.metadata (7.8 kB)
+Collecting pandas&lt;2.0.0,&gt;=1.4.2 (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached pandas-1.5.3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (12.2 MB)
+Collecting pypfb&lt;1.0.0 (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for pypfb&lt;1.0.0 from https://files.pythonhosted.org/packages/87/55/243988a1ed6208f6299a10ed74cc399af42af6d323f8cf20d8a6108ad690/pypfb-0.5.26-py3-none-any.whl.metadata
+  Using cached pypfb-0.5.26-py3-none-any.whl.metadata (775 bytes)
+Collecting python-dateutil (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached python_dateutil-2.8.2-py2.py3-none-any.whl (247 kB)
+Collecting requests (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for requests from https://files.pythonhosted.org/packages/70/8e/0e2d847013cb52cd35b38c009bb167a1a26b2ce6cd6965bf26b47bc0bf44/requests-2.31.0-py3-none-any.whl.metadata
+  Using cached requests-2.31.0-py3-none-any.whl.metadata (4.6 kB)
+Collecting tqdm&lt;5.0.0,&gt;=4.61.2 (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached tqdm-4.65.0-py3-none-any.whl (77 kB)
+Collecting urllib3&lt;2.0.0 (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for urllib3&lt;2.0.0 from https://files.pythonhosted.org/packages/c5/05/c214b32d21c0b465506f95c4f28ccbcba15022e000b043b72b3df7728471/urllib3-1.26.16-py2.py3-none-any.whl.metadata
+  Using cached urllib3-1.26.16-py2.py3-none-any.whl.metadata (48 kB)
+Collecting xmltodict&lt;0.14.0,&gt;=0.13.0 (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached xmltodict-0.13.0-py2.py3-none-any.whl (10.0 kB)
+Collecting numpy (from bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Obtaining dependency information for numpy from https://files.pythonhosted.org/packages/69/1f/c95b1108a9972a52d7b1b63ed8ca70466b59b8c1811bd121f1e667cc45d8/numpy-1.25.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
+  Using cached numpy-1.25.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.6 kB)
+Collecting matplotlib (from bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Obtaining dependency information for matplotlib from https://files.pythonhosted.org/packages/47/b9/6c0daa9b953a80b4e6933bf6a11a2d0633f257e84ee5995c5fd35de564c9/matplotlib-3.7.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
+  Using cached matplotlib-3.7.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.6 kB)
+Collecting scipy (from bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Obtaining dependency information for scipy from https://files.pythonhosted.org/packages/08/25/035fe07fc32c5a8b314f882faa9d4817223fa5faf524d3fedcf17a4b9d22/scipy-1.11.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
+  Using cached scipy-1.11.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (59 kB)
+Collecting scikit-learn (from bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Obtaining dependency information for scikit-learn from https://files.pythonhosted.org/packages/d4/61/966d3238f6cbcbb13350d31bd0accfc5efdf9e349cd2a42d9761b8b67a18/scikit_learn-1.3.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
+  Using cached scikit_learn-1.3.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (11 kB)
+Collecting seaborn (from bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Using cached seaborn-0.12.2-py3-none-any.whl (293 kB)
+Collecting matplotlib-venn (from bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Using cached matplotlib_venn-0.11.9-py3-none-any.whl
+Collecting tabulate (from bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Using cached tabulate-0.9.0-py3-none-any.whl (35 kB)
+Collecting statsmodels (from bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Using cached statsmodels-0.14.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (10.1 MB)
+Collecting textwrap3 (from bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Using cached textwrap3-0.9.2-py2.py3-none-any.whl (12 kB)
+Collecting adjustText (from bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Using cached adjustText-0.8-py3-none-any.whl (9.1 kB)
+Collecting asyncio&lt;4.0.0,&gt;=3.4.3 (from drsclient&lt;0.3.0,&gt;=0.2.2-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached asyncio-3.4.3-py3-none-any.whl (101 kB)
+Collecting backoff (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached backoff-1.11.1-py2.py3-none-any.whl (13 kB)
+Collecting httpx (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached httpx-0.23.3-py3-none-any.whl (71 kB)
+Collecting certifi (from httpx-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for certifi from https://files.pythonhosted.org/packages/4c/dd/2234eab22353ffc7d94e8d13177aaa050113286e93e7b40eae01fbf7c3d9/certifi-2023.7.22-py3-none-any.whl.metadata
+  Using cached certifi-2023.7.22-py3-none-any.whl.metadata (2.2 kB)
+Collecting httpcore&lt;0.17.0,&gt;=0.15.0 (from httpx-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached httpcore-0.16.3-py3-none-any.whl (69 kB)
+Collecting rfc3986[idna2008]&lt;2,&gt;=1.3 (from httpx-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached rfc3986-1.5.0-py2.py3-none-any.whl (31 kB)
+Collecting sniffio (from httpx-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached sniffio-1.3.0-py3-none-any.whl (10 kB)
+Collecting pytz&gt;=2020.1 (from pandas&lt;2.0.0,&gt;=1.4.2-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached pytz-2023.3-py2.py3-none-any.whl (502 kB)
+Collecting PyYAML&lt;6.0.0,&gt;=5.3.1 (from pypfb&lt;1.0.0-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached PyYAML-5.4.1-cp39-cp39-manylinux1_x86_64.whl (630 kB)
+Collecting click (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached click-7.1.2-py2.py3-none-any.whl (82 kB)
+Collecting dictionaryutils&lt;4.0.0,&gt;=3.4.3 (from pypfb&lt;1.0.0-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached dictionaryutils-3.4.6-py3-none-any.whl
+Collecting fastavro&lt;1.9.0,&gt;=1.8.2 (from pypfb&lt;1.0.0-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for fastavro&lt;1.9.0,&gt;=1.8.2 from https://files.pythonhosted.org/packages/d1/32/12202e93d0cac2fe6a38066a1264391fdbfd8fcfea446846d9dff4f68c53/fastavro-1.8.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
+  Using cached fastavro-1.8.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.5 kB)
+Collecting gdcdictionary&lt;2.0.0,&gt;=1.2.0 (from pypfb&lt;1.0.0-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached gdcdictionary-1.2.0-py3-none-any.whl
+Collecting python-json-logger&lt;0.2.0,&gt;=0.1.11 (from pypfb&lt;1.0.0-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached python_json_logger-0.1.11-py2.py3-none-any.whl
+Collecting attrs&gt;=17.3.0 (from aiohttp-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached attrs-23.1.0-py3-none-any.whl (61 kB)
+Collecting charset-normalizer&lt;4.0,&gt;=2.0 (from aiohttp-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for charset-normalizer&lt;4.0,&gt;=2.0 from https://files.pythonhosted.org/packages/f9/0d/514be8597d7a96243e5467a37d337b9399cec117a513fcf9328405d911c0/charset_normalizer-3.2.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
+  Using cached charset_normalizer-3.2.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (31 kB)
+Collecting multidict&lt;7.0,&gt;=4.5 (from aiohttp-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached multidict-6.0.4-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (114 kB)
+Collecting async-timeout&lt;5.0,&gt;=4.0.0a3 (from aiohttp-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached async_timeout-4.0.2-py3-none-any.whl (5.8 kB)
+Collecting yarl&lt;2.0,&gt;=1.0 (from aiohttp-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached yarl-1.9.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (269 kB)
+Collecting frozenlist&gt;=1.1.1 (from aiohttp-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for frozenlist&gt;=1.1.1 from https://files.pythonhosted.org/packages/b5/03/7dec2e257bd173b5ca1f74477863b97d322149f6f0284d7decead8c5ceeb/frozenlist-1.4.0-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
+  Using cached frozenlist-1.4.0-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.2 kB)
+Collecting aiosignal&gt;=1.1.2 (from aiohttp-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached aiosignal-1.3.1-py3-none-any.whl (7.6 kB)
+Collecting six&gt;=1.5 (from python-dateutil-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached six-1.16.0-py2.py3-none-any.whl (11 kB)
+Collecting idna&lt;4,&gt;=2.5 (from requests-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached idna-3.4-py3-none-any.whl (61 kB)
+Collecting marshmallow&lt;4.0.0,&gt;=3.18.0 (from dataclasses-json-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for marshmallow&lt;4.0.0,&gt;=3.18.0 from https://files.pythonhosted.org/packages/ed/3c/cebfdcad015240014ff08b883d1c0c427f2ba45ae8c6572851b6ef136cad/marshmallow-3.20.1-py3-none-any.whl.metadata
+  Using cached marshmallow-3.20.1-py3-none-any.whl.metadata (7.8 kB)
+Collecting typing-inspect&lt;1,&gt;=0.4.0 (from dataclasses-json-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for typing-inspect&lt;1,&gt;=0.4.0 from https://files.pythonhosted.org/packages/65/f3/107a22063bf27bdccf2024833d3445f4eea42b2e598abfbd46f6a63b6cb0/typing_inspect-0.9.0-py3-none-any.whl.metadata
+  Using cached typing_inspect-0.9.0-py3-none-any.whl.metadata (1.5 kB)
+Collecting jsonschema-specifications&gt;=2023.03.6 (from jsonschema-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for jsonschema-specifications&gt;=2023.03.6 from https://files.pythonhosted.org/packages/1c/24/83349ac2189cc2435e84da3f69ba3c97314d3c0622628e55171c6798ed80/jsonschema_specifications-2023.7.1-py3-none-any.whl.metadata
+  Using cached jsonschema_specifications-2023.7.1-py3-none-any.whl.metadata (2.8 kB)
+Collecting referencing&gt;=0.28.4 (from jsonschema-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for referencing&gt;=0.28.4 from https://files.pythonhosted.org/packages/ea/c3/f75f0ce2cdacca3d68a70b1756635092a1add1002e34afb4895b9fb62598/referencing-0.30.0-py3-none-any.whl.metadata
+  Using cached referencing-0.30.0-py3-none-any.whl.metadata (2.7 kB)
+Collecting rpds-py&gt;=0.7.1 (from jsonschema-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for rpds-py&gt;=0.7.1 from https://files.pythonhosted.org/packages/7d/99/dde5f56b7b93eb28a2fbba393d7b48cc2fec20371fa9c11b627d97b0f900/rpds_py-0.9.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
+  Using cached rpds_py-0.9.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (3.7 kB)
+Collecting contourpy&gt;=1.0.1 (from matplotlib-&gt;bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Obtaining dependency information for contourpy&gt;=1.0.1 from https://files.pythonhosted.org/packages/38/6f/5382bdff9dda60cb17cef6dfa2bad3e6edacffd5c2243e282e851c63f721/contourpy-1.1.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
+  Using cached contourpy-1.1.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.7 kB)
+Collecting cycler&gt;=0.10 (from matplotlib-&gt;bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Using cached cycler-0.11.0-py3-none-any.whl (6.4 kB)
+Collecting fonttools&gt;=4.22.0 (from matplotlib-&gt;bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Obtaining dependency information for fonttools&gt;=4.22.0 from https://files.pythonhosted.org/packages/aa/58/9054d2d3d475c4222c084c81f6f2047c2aed31d42e706757268bb1159f69/fonttools-4.41.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
+  Using cached fonttools-4.41.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (150 kB)
+Collecting kiwisolver&gt;=1.0.1 (from matplotlib-&gt;bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Using cached kiwisolver-1.4.4-cp39-cp39-manylinux_2_12_x86_64.manylinux2010_x86_64.whl (1.6 MB)
+Collecting packaging&gt;=20.0 (from matplotlib-&gt;bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Using cached packaging-23.1-py3-none-any.whl (48 kB)
+Collecting pillow&gt;=6.2.0 (from matplotlib-&gt;bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Obtaining dependency information for pillow&gt;=6.2.0 from https://files.pythonhosted.org/packages/50/e5/0d484d1ac71b934638f91b7156203ba5bf3eb12f596b616a68a85c123808/Pillow-10.0.0-cp39-cp39-manylinux_2_28_x86_64.whl.metadata
+  Using cached Pillow-10.0.0-cp39-cp39-manylinux_2_28_x86_64.whl.metadata (9.5 kB)
+Collecting pyparsing&lt;3.1,&gt;=2.3.1 (from matplotlib-&gt;bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Using cached pyparsing-3.0.9-py3-none-any.whl (98 kB)
+Collecting importlib-resources&gt;=3.2.0 (from matplotlib-&gt;bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Obtaining dependency information for importlib-resources&gt;=3.2.0 from https://files.pythonhosted.org/packages/29/d1/bed03eca30aa05aaf6e0873de091f9385c48705c4a607c2dfe3edbe543e8/importlib_resources-6.0.0-py3-none-any.whl.metadata
+  Using cached importlib_resources-6.0.0-py3-none-any.whl.metadata (4.2 kB)
+Collecting joblib&gt;=1.1.1 (from scikit-learn-&gt;bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Obtaining dependency information for joblib&gt;=1.1.1 from https://files.pythonhosted.org/packages/28/08/9dcdaa5aac4634e4c23af26d92121f7ce445c630efa0d3037881ae2407fb/joblib-1.3.1-py3-none-any.whl.metadata
+  Using cached joblib-1.3.1-py3-none-any.whl.metadata (5.4 kB)
+Collecting threadpoolctl&gt;=2.0.0 (from scikit-learn-&gt;bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Obtaining dependency information for threadpoolctl&gt;=2.0.0 from https://files.pythonhosted.org/packages/81/12/fd4dea011af9d69e1cad05c75f3f7202cdcbeac9b712eea58ca779a72865/threadpoolctl-3.2.0-py3-none-any.whl.metadata
+  Using cached threadpoolctl-3.2.0-py3-none-any.whl.metadata (10.0 kB)
+Collecting patsy&gt;=0.5.2 (from statsmodels-&gt;bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Using cached patsy-0.5.3-py2.py3-none-any.whl (233 kB)
+Collecting jsonschema (from gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached jsonschema-3.2.0-py2.py3-none-any.whl (56 kB)
+Collecting pyrsistent&gt;=0.14.0 (from jsonschema-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached pyrsistent-0.19.3-py3-none-any.whl (57 kB)
+Requirement already satisfied: setuptools in /opt/conda/envs/canine/lib/python3.9/site-packages (from jsonschema-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1)) (68.0.0)
+Collecting h11&lt;0.15,&gt;=0.13 (from httpcore&lt;0.17.0,&gt;=0.15.0-&gt;httpx-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached h11-0.14.0-py3-none-any.whl (58 kB)
+Collecting anyio&lt;5.0,&gt;=3.0 (from httpcore&lt;0.17.0,&gt;=0.15.0-&gt;httpx-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for anyio&lt;5.0,&gt;=3.0 from https://files.pythonhosted.org/packages/19/24/44299477fe7dcc9cb58d0a57d5a7588d6af2ff403fdd2d47a246c91a3246/anyio-3.7.1-py3-none-any.whl.metadata
+  Using cached anyio-3.7.1-py3-none-any.whl.metadata (4.7 kB)
+Collecting zipp&gt;=3.1.0 (from importlib-resources&gt;=3.2.0-&gt;matplotlib-&gt;bioinfokit-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 2))
+  Obtaining dependency information for zipp&gt;=3.1.0 from https://files.pythonhosted.org/packages/8c/08/d3006317aefe25ea79d3b76c9650afabaf6d63d1c8443b236e7405447503/zipp-3.16.2-py3-none-any.whl.metadata
+  Using cached zipp-3.16.2-py3-none-any.whl.metadata (3.7 kB)
+Collecting mypy-extensions&gt;=0.3.0 (from typing-inspect&lt;1,&gt;=0.4.0-&gt;dataclasses-json-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Using cached mypy_extensions-1.0.0-py3-none-any.whl (4.7 kB)
+Collecting typing-extensions&gt;=3.7.4 (from typing-inspect&lt;1,&gt;=0.4.0-&gt;dataclasses-json-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for typing-extensions&gt;=3.7.4 from https://files.pythonhosted.org/packages/ec/6b/63cc3df74987c36fe26157ee12e09e8f9db4de771e0f3404263117e75b95/typing_extensions-4.7.1-py3-none-any.whl.metadata
+  Using cached typing_extensions-4.7.1-py3-none-any.whl.metadata (3.1 kB)
+Collecting exceptiongroup (from anyio&lt;5.0,&gt;=3.0-&gt;httpcore&lt;0.17.0,&gt;=0.15.0-&gt;httpx-&gt;gen3==4.20-&gt;-r /home/jovyan/condaenv.u83xlnk2.requirements.txt (line 1))
+  Obtaining dependency information for exceptiongroup from https://files.pythonhosted.org/packages/fe/17/f43b7c9ccf399d72038042ee72785c305f6c6fdc6231942f8ab99d995742/exceptiongroup-1.1.2-py3-none-any.whl.metadata
+  Using cached exceptiongroup-1.1.2-py3-none-any.whl.metadata (6.1 kB)
+Using cached gen3-4.20.0-py3-none-any.whl (162 kB)
+Using cached numpy-1.25.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (18.3 MB)
+Using cached pypfb-0.5.26-py3-none-any.whl (28 kB)
+Using cached aiohttp-3.8.5-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (1.1 MB)
+Using cached requests-2.31.0-py3-none-any.whl (62 kB)
+Using cached urllib3-1.26.16-py2.py3-none-any.whl (143 kB)
+Using cached dataclasses_json-0.5.14-py3-none-any.whl (26 kB)
+Using cached matplotlib-3.7.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (11.6 MB)
+Using cached scikit_learn-1.3.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (10.9 MB)
+Using cached scipy-1.11.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (36.5 MB)
+Using cached certifi-2023.7.22-py3-none-any.whl (158 kB)
+Using cached charset_normalizer-3.2.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (202 kB)
+Using cached contourpy-1.1.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (300 kB)
+Using cached fastavro-1.8.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.7 MB)
+Using cached fonttools-4.41.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (4.5 MB)
+Using cached frozenlist-1.4.0-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (228 kB)
+Using cached importlib_resources-6.0.0-py3-none-any.whl (31 kB)
+Using cached joblib-1.3.1-py3-none-any.whl (301 kB)
+Using cached marshmallow-3.20.1-py3-none-any.whl (49 kB)
+Using cached Pillow-10.0.0-cp39-cp39-manylinux_2_28_x86_64.whl (3.4 MB)
+Using cached threadpoolctl-3.2.0-py3-none-any.whl (15 kB)
+Using cached typing_inspect-0.9.0-py3-none-any.whl (8.8 kB)
+Using cached anyio-3.7.1-py3-none-any.whl (80 kB)
+Using cached typing_extensions-4.7.1-py3-none-any.whl (33 kB)
+Using cached zipp-3.16.2-py3-none-any.whl (7.2 kB)
+Using cached exceptiongroup-1.1.2-py3-none-any.whl (14 kB)
+Installing collected packages: textwrap3, rfc3986, pytz, cdislogging, asyncio, zipp, xmltodict, urllib3, typing-extensions, tqdm, threadpoolctl, tabulate, sniffio, six, PyYAML, python-json-logger, pyrsistent, pyparsing, pillow, packaging, numpy, mypy-extensions, multidict, kiwisolver, joblib, idna, humanfriendly, h11, frozenlist, fonttools, fastavro, exceptiongroup, cycler, click, charset-normalizer, certifi, backoff, attrs, async-timeout, aiofiles, yarl, typing-inspect, scipy, requests, python-dateutil, patsy, marshmallow, jsonschema, importlib-resources, contourpy, anyio, aiosignal, scikit-learn, pandas, matplotlib, indexclient, httpcore, dictionaryutils, dataclasses-json, aiohttp, statsmodels, seaborn, matplotlib-venn, httpx, gdcdictionary, adjustText, drsclient, bioinfokit, pypfb, gen3
+Successfully installed PyYAML-5.4.1 adjustText-0.8 aiofiles-0.8.0 aiohttp-3.8.5 aiosignal-1.3.1 anyio-3.7.1 async-timeout-4.0.2 asyncio-3.4.3 attrs-23.1.0 backoff-1.11.1 bioinfokit-2.1.1 cdislogging-1.1.1 certifi-2023.7.22 charset-normalizer-3.2.0 click-7.1.2 contourpy-1.1.0 cycler-0.11.0 dataclasses-json-0.5.14 dictionaryutils-3.4.6 drsclient-0.2.3 exceptiongroup-1.1.2 fastavro-1.8.2 fonttools-4.41.1 frozenlist-1.4.0 gdcdictionary-1.2.0 gen3-4.20.0 h11-0.14.0 httpcore-0.16.3 httpx-0.23.3 humanfriendly-10.0 idna-3.4 importlib-resources-6.0.0 indexclient-2.2.1 joblib-1.3.1 jsonschema-3.2.0 kiwisolver-1.4.4 marshmallow-3.20.1 matplotlib-3.7.2 matplotlib-venn-0.11.9 multidict-6.0.4 mypy-extensions-1.0.0 numpy-1.25.2 packaging-23.1 pandas-1.5.3 patsy-0.5.3 pillow-10.0.0 pyparsing-3.0.9 pypfb-0.5.26 pyrsistent-0.19.3 python-dateutil-2.8.2 python-json-logger-0.1.11 pytz-2023.3 requests-2.31.0 rfc3986-1.5.0 scikit-learn-1.3.0 scipy-1.11.1 seaborn-0.12.2 six-1.16.0 sniffio-1.3.0 statsmodels-0.14.0 tabulate-0.9.0 textwrap3-0.9.2 threadpoolctl-3.2.0 tqdm-4.65.0 typing-extensions-4.7.1 typing-inspect-0.9.0 urllib3-1.26.16 xmltodict-0.13.0 yarl-1.9.2 zipp-3.16.2
+
+done
+#
+# To activate this environment, use
+#
+#     $ conda activate canine
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
 </div>
 <div id="cell-id=5ea93d81-1156-444f-b064-f15c3a372be5" class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper">
@@ -15329,7 +15638,7 @@ workflow<span class="w"> </span><span class="o">{</span>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>nextflow<span class="w"> </span>run<span class="w"> </span>canine.nf<span class="w"> </span>--resume
@@ -15353,29 +15662,25 @@ workflow<span class="w"> </span><span class="o">{</span>
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>N E X T F L O W  ~  version 22.10.6
-Launching `canine.nf` [voluminous_spence] DSL2 - revision: 660eb25521
+Launching `canine.nf` [cheeky_poisson] DSL2 - revision: 660eb25521
 [-        ] process &gt; DownloadFastqFile -
 
-[-        ] process &gt; DownloadFastqFile [  0%] 0 of 1
+[-        ] process &gt; DownloadFastqFile -
 [-        ] process &gt; AnalyzeFastqFile  -
 
 executor &gt;  local (1)
-[4e/d145d9] process &gt; DownloadFastqFile [  0%] 0 of 1
-[-        ] process &gt; AnalyzeFastqFile  -
-
-executor &gt;  local (1)
-[4e/d145d9] process &gt; DownloadFastqFile [100%] 1 of 1 ✔
+[fc/086f71] process &gt; DownloadFastqFile [  0%] 0 of 1
 [-        ] process &gt; AnalyzeFastqFile  -
 
 executor &gt;  local (2)
-[4e/d145d9] process &gt; DownloadFastqFile    [100%] 1 of 1 ✔
-[06/2b42a8] process &gt; AnalyzeFastqFile (1) [  0%] 0 of 1
+[fc/086f71] process &gt; DownloadFastqFile    [100%] 1 of 1 ✔
+[6d/4a6eb5] process &gt; AnalyzeFastqFile (1) [  0%] 0 of 1
 
 executor &gt;  local (2)
-[4e/d145d9] process &gt; DownloadFastqFile    [100%] 1 of 1 ✔
-[06/2b42a8] process &gt; AnalyzeFastqFile (1) [100%] 1 of 1 ✔
-<span class="ansi-green-intense-fg ansi-bold">Completed at: 25-Jul-2023 19:43:57
-Duration    : 1m 13s
+[fc/086f71] process &gt; DownloadFastqFile    [100%] 1 of 1 ✔
+[6d/4a6eb5] process &gt; AnalyzeFastqFile (1) [100%] 1 of 1 ✔
+<span class="ansi-green-intense-fg ansi-bold">Completed at: 31-Jul-2023 19:26:50
+Duration    : 1m 11s
 CPU hours   : (a few seconds)
 Succeeded   : 2
 </span>
