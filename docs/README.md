@@ -3,12 +3,15 @@
 This repository hosts some Nextflow workflow tutorials:
 
 1. Canine Nextflow Tutorial
+
 Details how to utilize Nextflow to analyze FASTQ files from the Canine Data Commons, demonstrates how to download data using the Gen3 SDK, and how to perform sequence analysis on the retrieved FASTQ file. The tutorial covers the structure and components of a Nextflow workflow, including processes, channels, execution abstraction, and scripting
 
 2. Proteomic Data Commons Nextflow Tutorial
+
 Demonstrates how to retrieve, process, and visualize protein relative expression data from the PDC API with Nextflow. Illustrates use of Nextflow features such as channels, parameters, and environment and configuration files
 
 3. Multiple Container Nextflow Tutorial
+
 Illustrate how to set up a multi-container Nextflow workflow using two Python scripts, each operating in a distinct Conda environment
 
 
