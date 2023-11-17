@@ -1,4 +1,4 @@
-FROM python:3.9.14
+FROM python:3.11.6
 USER root
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -23,5 +23,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY . /utils
 WORKDIR /utils
 
+RUN pip install pylibjpeg
+RUN pip install pylibjpeg-libjpeg
+RUN pip install gen3
 RUN pip install -r requirements.txt
 
