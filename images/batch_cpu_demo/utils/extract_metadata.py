@@ -2,9 +2,10 @@ import pandas as pd
 import os
 import argparse
 from dicom_csv import join_tree
+import sys
 
-dicom_input = "$dicom_files"
-metadata_csv = "dicom-metadata.csv"
+dicom_input = sys.argv[1]
+metadata_csv = f"dicom-metadata-{dicom_input}.csv"
 
 
 def main(dicom_input, metadata_csv):

@@ -3,8 +3,10 @@ import argparse
 import numpy as np
 from PIL import Image
 import os
+import sys
 
-dicom_input = "$dicom_files"
+
+dicom_input = sys.argv[1]
 
 
 def main(dicom_input):
