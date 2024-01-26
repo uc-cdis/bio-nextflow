@@ -9,7 +9,7 @@ RUN yum update && yum install -y \
     wget && \
     rm -rf /var/lib/yum/lists/*
 
-COPY . /utils
+COPY ../../images/batch_cpu_demo /utils
 WORKDIR /utils
 
 RUN pip install setuptools
