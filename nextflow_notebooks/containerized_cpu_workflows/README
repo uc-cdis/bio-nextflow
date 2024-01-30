@@ -1,0 +1,15 @@
+The first of the two MIDRC CPU workflows (midrc_download_dcm_conda.ipynb) can be run on its own and will download
+MIDRC dicom files to your workspace. The second workflow (midrc_cpu_batch_demo.ipynb) is run on the cloud and will
+convert the dicom files from the first workflow to png files, extract metadata from the dicom files, and save the
+results of these two processes to your local workspace. The second workflow requires you to build a compatible workflow
+container.
+
+To build the container, please run the docker build command on the Dockerfile, in the same directory where all the model
+files, code, Dockerfile and requirements.txt file lives. Then push the container to Gen3 staging by requesting
+credentials, get it approved and receive a docker URI to plug into the nextflow workflow.
+
+To run the container in the nextflow workflow, paste the approved docker URI received from Gen3 in the "container"
+section of the nextflow config. This lives in the nextflow workflow notebook (midrc_cpu_batch_demo.ipynb).
+Run the notebook in BRH to deploy the container on AWS batch. Note: all the "placeholder" values in the notebook will
+need to be replaced with values specific to your workspace. These come pre-populated with the workspace, please see the
+"Nextflow welcome" page for more details and copy the sample config values onto your nextflow config.

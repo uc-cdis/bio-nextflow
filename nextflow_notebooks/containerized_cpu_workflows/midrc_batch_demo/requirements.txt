@@ -1,0 +1,5 @@
+numpy==1.26.0
+pandas==2.1.2
+pydicom==2.4.3
+Pillow==10.2.0
+dicom-csv==0.2.9

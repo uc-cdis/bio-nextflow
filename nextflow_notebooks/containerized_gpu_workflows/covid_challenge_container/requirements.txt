@@ -1,0 +1,10 @@
+--extra-index-url https://download.pytorch.org/whl/cu116
+torch==1.13.1
+torchvision==0.14.1
+matplotlib
+pandas
+numpy
+pydicom
+scikit-image
+scipy
+python-gdcm
