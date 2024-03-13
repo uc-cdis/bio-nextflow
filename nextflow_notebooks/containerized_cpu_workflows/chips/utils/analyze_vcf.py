@@ -4,7 +4,6 @@ import cyvcf2
 
 
 vcf_file = sys.argv[1]
-file_uuid = sys.argv[2]
 results_csv = f"{vcf_file}_analysis.csv"
 
 
