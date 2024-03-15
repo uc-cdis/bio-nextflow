@@ -2,7 +2,7 @@
 import argparse
 import sys
 import pandas as pd
-from cyvcf2 import VCF
+from pysam import VariantFile
 
 
 def analyze_vcf(input_vcf, output_csv, chip_truth_variants):
@@ -12,34 +12,38 @@ def analyze_vcf(input_vcf, output_csv, chip_truth_variants):
     chrom_list = []
     ref_list = []
     alt_list = []
-    start_list = []
-    end_list = []
-    for variant in VCF(input_vcf):
-        chrom = variant.CHROM
-        ref = variant.REF
-        alt = variant.ALT[0]
-        start = variant.start
-        end = variant.end
+    pos_list = []
+    in_vcf = VariantFile(input_vcf)
+    for variant in in_vcf.fetch():
+        chrom = variant.chrom
+        ref = variant.ref
+        alt = variant.alts[0]
+        pos = variant.pos
 
+        print("cpra {} {} {} {}".format(chrom, pos, ref, alt))
+        chrom_list.append(chrom)
         ref_list.append(ref)
         alt_list.append(alt)
-        start_list.append(start)
-        end_list.append(end)
+        pos_list.append(pos)
 
     # create a pandas df from variant_dict
+
     variant_dict = {
         "chromosome_name": chrom_list,
-        "start": start_list,
-        "stop": end_list,
+        "start": pos_list,
         "reference": ref_list,
         "variant": alt_list,
     }
     sample_variant_df = pd.DataFrame.from_dict(variant_dict)
 
+    print("truth df columns {}".format(truth_df.columns))
+    print("sample variant df columns {}".format(sample_variant_df.columns))
     # inner join
-    chip_variants = sample_variant_df.join(
-        truth_df,
-        on=["chromosome_name", "start", "stop", "reference", "variant"],
+    chip_variants = pd.merge(
+        left=sample_variant_df,
+        right=truth_df,
+        left_on=["chromosome_name", "start", "reference", "variant"],
+        right_on=["chromosome_name", "start", "reference", "variant"],
         how="inner",
     )
     return chip_variants
