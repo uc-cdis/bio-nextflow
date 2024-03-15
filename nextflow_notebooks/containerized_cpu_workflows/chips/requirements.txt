@@ -1,4 +1,4 @@
 numpy
 pandas
 requests
-cyvcf2
+pysam
