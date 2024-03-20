@@ -10,25 +10,26 @@ def analyze_vcf(input_vcf, output_csv, chip_truth_variants):
     truth_df = pd.read_csv(chip_truth_variants, sep="\t")
     # dump sample variants to a pandas df
     print("Reading sample df")
-    sample_variant_df = pd.read_csv(
+    sample_variant_df_full = pd.read_csv(
         input_vcf, sep="\t", comment="#", header=None, compression="gzip"
     )
-    sample_variant_df.columns = [
+    # select first five columns
+    sample_variant_df_mini = sample_variant_df_full.iloc[:, [0, 1, 2, 3, 4]]
+    sample_variant_df_mini.columns = [
         "chromosome_name",
         "start",
         "id",
         "reference",
         "variant",
-        "qual",
-        "filter",
-        "info",
-        "format",
-        "tumor",
     ]
+    # remove chr prefix from chromosome column
+    sample_variant_df_mini["chromosome_name"] = sample_variant_df_mini[
+        "chromosome_name"
+    ].str.replace("chr", "")
 
     # inner join
     chip_variants = pd.merge(
-        left=sample_variant_df,
+        left=sample_variant_df_mini,
         right=truth_df,
         left_on=["chromosome_name", "start", "reference", "variant"],
         right_on=["chromosome_name", "start", "reference", "variant"],
