@@ -4,8 +4,6 @@ FROM quay.io/cdis/containers:gen3-amazonlinux-base-AL2023fix
 RUN yum update && yum install -y \
     python3 \
     python3-pip \
-    g++ \
-    libgsl* \
     wget && \
     rm -rf /var/lib/yum/lists/*
 
@@ -22,7 +20,7 @@ RUN pip install -r requirements.txt
 RUN cd /app
 
 # Download human reference genome
-RUN wget https://api.gdc.cancer.gov/data/254f697d-310d-4d7d-a27b-27fbf767a834 -O GRCh38.d1.vd1.fa.tar.gz
+#RUN wget https://api.gdc.cancer.gov/data/254f697d-310d-4d7d-a27b-27fbf767a834 -O GRCh38.d1.vd1.fa.tar.gz
 
 # Copy in test_data folder for local testing - DO NOT PUBLISH IMAGE WITH DATA
 #COPY test_data .
@@ -39,13 +37,14 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 #RUN yum install java-21-amazon-corretto -y
 
 # install samtools
-RUN yum install tar -y
+#RUN yum install tar -y
 #RUN yum install bzip2 -y
 #RUN yum install zlib-devel -y
 
 
 RUN yum install dnf
 RUN dnf check-update
+
 # note that bz2 is needed for cram files,also lzma. disabling for now
 #RUN wget https://github.com/samtools/samtools/releases/download/1.19.2/samtools-1.19.2.tar.bz2 \
 #    && tar jxf samtools-1.19.2.tar.bz2 \
