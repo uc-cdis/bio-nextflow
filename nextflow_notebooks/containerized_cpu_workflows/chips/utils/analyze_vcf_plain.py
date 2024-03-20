@@ -23,7 +23,6 @@ def analyze_vcf(input_vcf, output_csv, chip_truth_variants):
         "filter",
         "info",
         "format",
-        "normal",
         "tumor",
     ]
 
