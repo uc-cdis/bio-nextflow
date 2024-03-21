@@ -4,6 +4,7 @@ FROM quay.io/cdis/containers:gen3-amazonlinux-base-AL2023fix
 RUN yum update && yum install -y \
     python3 \
     python3-pip \
+    vim \
     wget && \
     rm -rf /var/lib/yum/lists/*
 
