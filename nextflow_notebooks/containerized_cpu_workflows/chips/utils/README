@@ -1,2 +1,5 @@
 To get a few test WES BAMs for CHIP POC, see these bams from gdc portal
 https://portal.gdc.cancer.gov/v1/repository?facetTab=files&filters=%7B%22op%22%3A%22and%22%2C%22content%22%3A%5B%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22cases.case_id%22%2C%22value%22%3A%5B%2238a3ea92-8965-4bda-9dbd-144832975cdd%22%2C%2243e228ae-c890-444f-afbd-49385562e33a%22%2C%224549bff6-6886-4102-a1de-02691b664c52%22%2C%2261935424-44d0-4211-81c1-c925e436eac5%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22cases.samples.tissue_type%22%2C%22value%22%3A%5B%22normal%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.data_format%22%2C%22value%22%3A%5B%22bam%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22files.experimental_strategy%22%2C%22value%22%3A%5B%22WXS%22%5D%7D%7D%5D%7D
+
+Note: You need the "aacr.chip.project.tsv" file with truth variants for chip to be present in the
+utils directory. This file is not pushed to github, so check with the team about this file
