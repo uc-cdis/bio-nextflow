@@ -23,6 +23,9 @@ def analyze_vcf(input_vcf, output_csv, chip_truth_variants):
         "variant",
     ]
     # remove chr prefix from chromosome column
+    sample_variant_df_mini["chromosome_name"] = sample_variant_df_mini[
+        "chromosome_name"
+    ].str.replace("chr", "")
     sample_variant_df_mini["chromosome_name"] = (
         sample_variant_df_mini["chromosome_name"].str.replace("chr", "").copy()
     )

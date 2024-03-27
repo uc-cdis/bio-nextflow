@@ -4,6 +4,13 @@ import sys
 import pandas as pd
 from pysam import VariantFile
 
+"""
+Note that pysam is unable to run with current FIPS compliance
+This code needs further debugging to work in the container
+a fix is analyze_vcf_plain.py which doesn't use pysam
+I left the code here for further debugging in the near future
+"""
+
 
 def analyze_vcf(input_vcf, output_csv, chip_truth_variants):
     # dump truth variants to a pandas df
