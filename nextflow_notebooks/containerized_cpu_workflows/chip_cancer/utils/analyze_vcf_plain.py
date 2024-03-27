@@ -26,6 +26,9 @@ def analyze_vcf(input_vcf, output_csv, chip_truth_variants):
     sample_variant_df_mini["chromosome_name"] = sample_variant_df_mini[
         "chromosome_name"
     ].str.replace("chr", "")
+    sample_variant_df_mini["chromosome_name"] = (
+        sample_variant_df_mini["chromosome_name"].str.replace("chr", "").copy()
+    )
 
     # inner join
     chip_variants = pd.merge(
