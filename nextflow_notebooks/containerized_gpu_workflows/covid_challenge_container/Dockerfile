@@ -1,4 +1,4 @@
-FROM quay.io/cdis/containers:gen3-cuda-11.8-ubuntu22.04-openssl
+FROM public.ecr.aws/u5x5h6w3/nextflow-approved/public:gen3-cuda-11.8-ubuntu22.04-openssl
 
 # symlink python to python3
 RUN ln -s /usr/bin/python3 /usr/bin/python
