@@ -1,4 +1,4 @@
-FROM quay.io/cdis/containers:gen3-amazonlinux-base-AL2023fix
+FROM public.ecr.aws/u5x5h6w3/nextflow-approved/public:amazonlinux-base
 USER root
 
 RUN yum update && yum install -y \
