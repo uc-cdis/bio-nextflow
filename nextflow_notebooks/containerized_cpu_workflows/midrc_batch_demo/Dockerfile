@@ -9,12 +9,13 @@ RUN yum update && yum install -y \
     wget && \
     rm -rf /var/lib/yum/lists/*
 
-COPY ../../images/batch_cpu_demo /utils
+COPY requirements.txt /tmp/requirements.txt
+COPY ./utils /utils
 WORKDIR /utils
 
 RUN pip install setuptools
 RUN pip install gen3
 RUN pip install pylibjpeg
 RUN pip install pylibjpeg-libjpeg
-RUN pip install -r requirements.txt
+RUN pip install -r /tmp/requirements.txt
 
