@@ -5,7 +5,7 @@ OVERVIEW:
 ---------
 This workflow:
 - Lists available QAG tools (tools/list).
-- Executes a pipeline to answer your question using the QAG API (tools/call).
+- Executes a pipeline to answer your question using the QAG MCP API (tools/call).
 - Runs these processes in parallel.
 - Outputs are saved in `results/qag_outputs`.
 
