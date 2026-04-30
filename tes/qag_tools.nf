@@ -76,6 +76,8 @@ process execute_pipeline {
 
     script:
     """
+    mkdir -p qag_outputs
+
     # Get answer for a question from execute_pipeline
     curl -s -H "Content-Type: application/json" \
         -H "Accept: application/json,text/event-stream" \
