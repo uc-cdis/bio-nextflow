@@ -9,6 +9,12 @@ data/*
 defaults/colors.tsv
 defaults/colors_*.tsv
 stats.json
+tes/.nextflow/
+tes/**/.nextflow/
+tes/results
+tes/**/results/
+tes/work
+tes/**/work
 
 # Downloaded remote files from sources we expect
 /nextstrain-ncov-private/
