@@ -21,7 +21,7 @@ option_list <- list(
   make_option("--covariate_min_fraction", type="double", default=0.01),
   make_option("--test_fraction", type="double", default=0.2),
   make_option("--n_fold", type="integer", default=3),
-  make_option("--output_directory", type="character")
+  make_option("--output_directory", type="character", default="plp_outputs")
 )
 opt <- parse_args(OptionParser(option_list=option_list))
 

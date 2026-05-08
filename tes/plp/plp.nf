@@ -1,7 +1,7 @@
 nextflow.enable.dsl=2
 
 process create_workflow_inputs {
-    container 'python:3.9'
+    //container 'python:3.9'
     publishDir "results/${params.plpRunName}", mode: 'copy'
 
     input:
@@ -131,6 +131,10 @@ process zip_plp_outputs {
 }
 
 workflow {
+    // Test
+    //input_ch = Channel.fromPath('data/*.txt')
+    //PROCESS_DATA(input_ch)
+
     // Generate simulated data
     plp_data_ch = simulate_plp_data()
 

@@ -36,17 +36,18 @@ OUTPUTS:
 Workflow results and tool listings are saved in `results/qag_outputs`.
 */
 
+
 params.qag_question = "What is the co-occurence frequency of somatic heterozygous deletions in BRCA2 and NF1 in the Kidney Chromophobe TCGA-KICH project in the genomic data commons?"
 params.outdir = "results"
 params.qag_url = "https://gdc-qag.m3aicommons.org/gradio_api/mcp/"
+    
 
 process list_tools {
     container 'python:3.9'
+    publishDir params.outdir
 
     output:
         path 'qag_outputs/output_list_tools.json'
-    publishDir params.outdir
-
 
     script:
     """
@@ -55,7 +56,7 @@ process list_tools {
     # Get tool list
     curl -s -H "Content-Type: application/json" \
         -H "Accept: application/json,text/event-stream" \
-        -H "Authorization: Bearer ${GEN3_TOKEN}" \
+        -H "Authorization: Bearer ${System.getenv('GEN3_TOKEN')}" \
         -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' \
         ${params.qag_url} \
     | grep '^data:' \
@@ -66,13 +67,13 @@ process list_tools {
 
 process execute_pipeline {
     container 'python:3.9'
+    publishDir params.outdir
 
     input:
         val(params.qag_question)
 
     output:
         path 'qag_outputs/output_execute_pipeline.json'
-    publishDir params.outdir
 
     script:
     """
@@ -81,7 +82,7 @@ process execute_pipeline {
     # Get answer for a question from execute_pipeline
     curl -s -H "Content-Type: application/json" \
         -H "Accept: application/json,text/event-stream" \
-        -H "Authorization: Bearer ${GEN3_TOKEN}" \
+        -H "Authorization: Bearer ${System.getenv('GEN3_TOKEN')}" \
         -d '{
             "jsonrpc":"2.0",
             "id":2,
