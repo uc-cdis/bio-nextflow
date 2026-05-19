@@ -20,9 +20,9 @@ library(PatientLevelPrediction)
 # Setting the Andromeda temp folder to a local directory (such as /dev/shm/andromeda-tmp or
 # /mnt/data/andromeda-tmp) avoids this issue, ensuring DuckDB can create and access valid database
 # files during simulation.
-library(Andromeda)
+# library(Andromeda)
 #options(andromedaTempFolder = "/mnt/data/andromeda-tmp")
-options(andromedaTempFolder = "/dev/shm/andromeda-tmp")
+# options(andromedaTempFolder = "/dev/shm/andromeda-tmp")
 
 option_list <- list(
   make_option("--sample_size", type="integer", default=1000,

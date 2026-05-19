@@ -74,10 +74,10 @@ process run_plp_model {
     publishDir "results/${params.plpRunName}", mode: 'copy'
 
     input:
-        tuple path(plpData), val(model_name), val(model_params)
+        tuple path(plpData), val(model_name), val(model_file_name),  val(model_params)
 
     output:
-        path "plp_outputs/${model_name}"
+        path "plp_outputs/${model_file_name}"
 
     script:
     """
@@ -97,7 +97,7 @@ process run_plp_model {
         --covariate_min_fraction ${params.covariate_min_fraction} \
         --test_fraction ${params.test_fraction} \
         --n_fold ${params.n_fold} \
-        --output_directory "plp_outputs/${model_name}"
+        --output_directory "plp_outputs/${model_file_name}"
     """
 }
 
@@ -118,12 +118,18 @@ process zip_plp_outputs {
     mkdir -p plp_outputs
 
     # Move all input directories into plp_outputs (preserving names)
-    mv ${model_dirs} plp_outputs
+    cp -r ${model_dirs} plp_outputs
 
-    # Remove all runPlp.rds files
-    find plp_outputs -type f -name "runPlp.rds" -delete
+    # Remove all runPlp.rds files. Temporarily commenting delete command. 
+    # find plp_outputs -type f -name "runPlp.rds" -delete
 
+    
+    cp workflow_inputs.yaml /tmp
+    cp -r plp_outputs /tmp
+    cd /tmp
     zip -r ${params.plpRunName}.zip workflow_inputs.yaml plp_outputs
+    cp /tmp/${params.plpRunName}.zip /work/
+
 
     echo "User-downloadable PLP outputs archived:"
     ls -la *.zip
@@ -140,7 +146,7 @@ workflow {
 
     // Prepare model parameter sets as channel
     models_ch = channel.fromList(params.model_list)
-        .map { model -> [model.name, groovy.json.JsonOutput.toJson(model.params)] }
+        .map { model -> [model.name, model.file_name, groovy.json.JsonOutput.toJson(model.params)] }
 
     // Combine data and model parameters for input to model runner
     run_inputs_ch = plp_data_ch
