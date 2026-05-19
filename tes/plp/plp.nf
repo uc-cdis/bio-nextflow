@@ -120,9 +120,8 @@ process zip_plp_outputs {
     # Move all input directories into plp_outputs (preserving names)
     cp -r ${model_dirs} plp_outputs
 
-    sleep 1000 # Sleep to allow for inspection of files before zipping, if needed
-    # Remove all runPlp.rds files
-    find plp_outputs -type f -name "runPlp.rds" -delete
+    # Remove all runPlp.rds files. Temporarily commenting delete command. 
+    # find plp_outputs -type f -name "runPlp.rds" -delete
 
     
     cp workflow_inputs.yaml /tmp
