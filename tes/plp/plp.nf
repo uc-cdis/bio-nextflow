@@ -118,17 +118,20 @@ process zip_plp_outputs {
     mkdir -p plp_outputs
 
     # Move all input directories into plp_outputs (preserving names)
+    # TODO: PR36 use cp -r instead of mv, restore after the fix
     cp -r ${model_dirs} plp_outputs
 
-    # Remove all runPlp.rds files. Temporarily commenting delete command. 
+    # Remove all runPlp.rds files.
+    # TODO: PR36 Temporarily commenting delete command, after the fix restore it
     # find plp_outputs -type f -name "runPlp.rds" -delete
 
-    
+    # TODO: PR36 Now copy commands are needed, after the fix keep only zip command
+    current_dir=\$PWD
     cp workflow_inputs.yaml /tmp
     cp -r plp_outputs /tmp
     cd /tmp
     zip -r ${params.plpRunName}.zip workflow_inputs.yaml plp_outputs
-    cp /tmp/${params.plpRunName}.zip /work/
+    cp /tmp/${params.plpRunName}.zip "\$current_dir"
 
 
     echo "User-downloadable PLP outputs archived:"
@@ -145,6 +148,7 @@ workflow {
     plp_data_ch = simulate_plp_data()
 
     // Prepare model parameter sets as channel
+    // TODO: PR36 added file_name to model params, test without them after the fix
     models_ch = channel.fromList(params.model_list)
         .map { model -> [model.name, model.file_name, groovy.json.JsonOutput.toJson(model.params)] }
 

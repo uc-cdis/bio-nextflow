@@ -13,17 +13,6 @@
 library(optparse)
 library(PatientLevelPrediction)
 
-# Redirect Andromeda temporary files to /mnt/data/andromeda-tmp
-# PatientLevelPrediction and other OHDSI tools require temporary database files for DuckDB.
-# On Kubernetes persistent volumes, the filesystem may pre-create stub files when R calls tempfile(),
-# causing DuckDB to fail opening them as valid databases.
-# Setting the Andromeda temp folder to a local directory (such as /dev/shm/andromeda-tmp or
-# /mnt/data/andromeda-tmp) avoids this issue, ensuring DuckDB can create and access valid database
-# files during simulation.
-# library(Andromeda)
-#options(andromedaTempFolder = "/mnt/data/andromeda-tmp")
-# options(andromedaTempFolder = "/dev/shm/andromeda-tmp")
-
 option_list <- list(
   make_option("--sample_size", type="integer", default=1000,
               help="Sample size [default %default]", metavar="number"),
