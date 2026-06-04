@@ -1,8 +1,8 @@
 nextflow.enable.dsl=2
 
 process create_workflow_inputs {
-    //container 'python:3.9'
-    publishDir "results/${params.plpRunName}", mode: 'copy'
+    //Debug
+    //publishDir "results/${params.plpRunName}", mode: 'copy'
 
     input:
     val model_list
@@ -47,10 +47,11 @@ process create_workflow_inputs {
 process simulate_plp_data {
     container 'quay.io/cdis/cadc-plp:fear_optparse'
     cpus 1
-    memory '1 GB'
-    disk '3 GB'
-
-    publishDir "results/${params.plpRunName}", mode: 'copy'
+    memory '4 GB'
+    //disk '3 GB'
+    
+    // Debug
+    //publishDir "results/${params.plpRunName}", mode: 'copy'
 
     output:
         path 'plp_outputs/plpData'
@@ -68,10 +69,10 @@ process simulate_plp_data {
 process run_plp_model {
     container 'quay.io/cdis/cadc-plp:fear_optparse'
     cpus 1
-    memory '4 GB'
-    disk '4 GB'
+    memory '16 GB'
     
-    publishDir "results/${params.plpRunName}", mode: 'copy'
+    // Debug
+    //publishDir "results/${params.plpRunName}", mode: 'copy'
 
     input:
         tuple path(plpData), val(model_name), val(model_file_name),  val(model_params)
@@ -81,6 +82,10 @@ process run_plp_model {
 
     script:
     """
+    # TODO: mountpoint-s3 and filesystem limitations: no support for random access writes in /work folder
+    #       temporarily set output_directory to "/tmp/" instead of "plp_outputs/" for work; after the fix 
+    #       set it back to "plp_outputs/${model_file_name}" and remove cp command
+
     run_plp_model.R \
         --plp_data_path ${plpData} \
         --model_name "${model_name}" \
@@ -97,7 +102,10 @@ process run_plp_model {
         --covariate_min_fraction ${params.covariate_min_fraction} \
         --test_fraction ${params.test_fraction} \
         --n_fold ${params.n_fold} \
-        --output_directory "plp_outputs/${model_file_name}"
+        --output_directory "/tmp/${model_file_name}"
+    
+    mkdir -p plp_outputs
+    cp -r /tmp/${model_file_name} plp_outputs/
     """
 }
 
@@ -118,18 +126,22 @@ process zip_plp_outputs {
     mkdir -p plp_outputs
 
     # Move all input directories into plp_outputs (preserving names)
-    # TODO: PR36 use cp -r instead of mv, restore after the fix
+    # TODO: mountpoint-s3 and filesystem limitations: mv command not supported
+    #       temporarily use cp -r instead of mv, restore after the fix
     cp -r ${model_dirs} plp_outputs
 
     # Remove all runPlp.rds files.
-    # TODO: PR36 Temporarily commenting delete command, after the fix restore it
+    # TODO: mountpoint-s3 and filesystem limitations: no delete command supported
+    #       Temporarily commenting delete command, after the fix restore it
     # find plp_outputs -type f -name "runPlp.rds" -delete
 
-    # TODO: PR36 Now copy commands are needed, after the fix keep only zip command
+    # TODO: mountpoint-s3 and filesystem limitations: no support for random access writes in /work folder
+    #       temporarily use copy to/form /tmp for work; after the fix keep only zip command
     current_dir=\$PWD
     cp workflow_inputs.yaml /tmp
     cp -r plp_outputs /tmp
     cd /tmp
+    find plp_outputs -type f -name "runPlp.rds" -delete
     zip -r ${params.plpRunName}.zip workflow_inputs.yaml plp_outputs
     cp /tmp/${params.plpRunName}.zip "\$current_dir"
 
@@ -148,7 +160,8 @@ workflow {
     plp_data_ch = simulate_plp_data()
 
     // Prepare model parameter sets as channel
-    // TODO: PR36 added file_name to model params, test without them after the fix
+    // TODO: mountpoint-s3 and filesystem limitations: model name with spaces not supported
+    //       PR36 added file_name to model params, test without them after the fix
     models_ch = channel.fromList(params.model_list)
         .map { model -> [model.name, model.file_name, groovy.json.JsonOutput.toJson(model.params)] }
 
