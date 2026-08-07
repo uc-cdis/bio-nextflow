@@ -19,13 +19,7 @@ plpRunName: "plp_run_output"
 # TODO: mountpoint-s3 and filesystem limitations: model name with spaced not supported
 #       PR36 added file_name to model params, test without them after the fix
 model_list:
-#  - name: "Lasso Logistic Regression"
-#    file_name: "lasso_logistic_regression"
-#    params:
-#      variance: 0.01
-#      seed: 42
   - name: "Random Forest"
-    file_name: "random_forest"
     params:
       ntrees: [500]
       criterion: ["gini"]
@@ -41,7 +35,13 @@ model_list:
       oobScore: [false]
       classWeight: ["balanced"]
       seed: 42
+#  - name: "Lasso Logistic Regression"
+#    file_name: "lasso_logistic_regression"
+#    params:
+#      variance: 0.01
+#      seed: 42
 #  - name: "Light Gradient Boosting Machine"
+#    file_name: "light_gradient_boosting_machine"
 #    params:
 #      numLeaves: [20, 31]
 #      maxDepth: [-1, 5]

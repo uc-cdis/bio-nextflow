@@ -13,8 +13,12 @@ tes/.nextflow/
 tes/**/.nextflow/
 tes/results
 tes/**/results/
-tes/work
-tes/**/work
+tes/work/
+tes/**/work/
+.nextflow
+work/
+benchmarks*/
+debug/
 
 # Downloaded remote files from sources we expect
 /nextstrain-ncov-private/
@@ -78,3 +82,4 @@ slurm-*.out
 
 # credential location in set_env_var.sh
 set_env_var.sh
+.Rproj.user

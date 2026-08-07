@@ -82,10 +82,6 @@ process run_plp_model {
 
     script:
     """
-    # TODO: mountpoint-s3 and filesystem limitations: no support for random access writes in /work folder
-    #       temporarily set output_directory to "/tmp/" instead of "plp_outputs/" for work; after the fix 
-    #       set it back to "plp_outputs/${model_file_name}" and remove cp command
-
     run_plp_model.R \
         --plp_data_path ${plpData} \
         --model_name "${model_name}" \
@@ -102,10 +98,7 @@ process run_plp_model {
         --covariate_min_fraction ${params.covariate_min_fraction} \
         --test_fraction ${params.test_fraction} \
         --n_fold ${params.n_fold} \
-        --output_directory "/tmp/${model_file_name}"
-    
-    mkdir -p plp_outputs
-    cp -r /tmp/${model_file_name} plp_outputs/
+        --output_directory "plp_outputs/${model_file_name}"
     """
 }
 
@@ -124,46 +117,24 @@ process zip_plp_outputs {
     script:
     """
     mkdir -p plp_outputs
-
-    # Move all input directories into plp_outputs (preserving names)
-    # TODO: mountpoint-s3 and filesystem limitations: mv command not supported
-    #       temporarily use cp -r instead of mv, restore after the fix
-    cp -r ${model_dirs} plp_outputs
-
+    mv ${model_dirs} plp_outputs
     # Remove all runPlp.rds files.
-    # TODO: mountpoint-s3 and filesystem limitations: no delete command supported
-    #       Temporarily commenting delete command, after the fix restore it
-    # find plp_outputs -type f -name "runPlp.rds" -delete
-
-    # TODO: mountpoint-s3 and filesystem limitations: no support for random access writes in /work folder
-    #       temporarily use copy to/form /tmp for work; after the fix keep only zip command
-    current_dir=\$PWD
-    cp workflow_inputs.yaml /tmp
-    cp -r plp_outputs /tmp
-    cd /tmp
     find plp_outputs -type f -name "runPlp.rds" -delete
     zip -r ${params.plpRunName}.zip workflow_inputs.yaml plp_outputs
-    cp /tmp/${params.plpRunName}.zip "\$current_dir"
-
-
     echo "User-downloadable PLP outputs archived:"
     ls -la *.zip
     """
 }
 
 workflow {
-    // Test
-    //input_ch = Channel.fromPath('data/*.txt')
-    //PROCESS_DATA(input_ch)
-
     // Generate simulated data
     plp_data_ch = simulate_plp_data()
 
     // Prepare model parameter sets as channel
-    // TODO: mountpoint-s3 and filesystem limitations: model name with spaces not supported
-    //       PR36 added file_name to model params, test without them after the fix
     models_ch = channel.fromList(params.model_list)
-        .map { model -> [model.name, model.file_name, groovy.json.JsonOutput.toJson(model.params)] }
+        .map { model -> 
+        def file_name = model.name.replaceAll(/\s+/, '_')
+        [model.name, file_name, groovy.json.JsonOutput.toJson(model.params)] }
 
     // Combine data and model parameters for input to model runner
     run_inputs_ch = plp_data_ch

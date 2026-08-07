@@ -36,9 +36,15 @@ import time
 import sys
 
 # COHORT_SIZES = [10000, 100000]
-COHORT_SIZES = [1000000, 100000, 10000]
+# COHORT_SIZES = [1000000, 100000, 10000]
 COHORT_SIZES = [100000, 10000]
-RUN_TYPES = {"single": 1, "parallel3": 3, "parallel5": 5, "parallel10": 10}
+RUN_TYPES = {
+    "wakenode": 1,
+    "single": 1,
+    "parallel3": 3,
+    "parallel5": 5,
+    "parallel10": 10,
+}
 PROFILES = ["tes"]
 # PROFILES = ['tes', 'local']
 
