@@ -19,7 +19,7 @@ How to use:
 2. Make sure Python packages pyyaml, pandas are installed.
 3. Run this script with:
 
-    python benchmark_plp.py
+    python3 benchmark_plp.py
 
 4. After completion, analyze benchmark.csv for workflow efficiency and bottlenecks.
 
@@ -37,7 +37,7 @@ import sys
 
 # COHORT_SIZES = [10000, 100000]
 # COHORT_SIZES = [1000000, 100000, 10000]
-COHORT_SIZES = [100000, 10000]
+COHORT_SIZES = [1000000, 100000, 10000]
 RUN_TYPES = {
     "wakenode": 1,
     "single": 1,
@@ -145,7 +145,7 @@ def benchmark_batch():
                 for i, trace_path in enumerate(trace_paths):
                     benchmark_id = f"{benchmark_id_base}-{i+1}"
                     collect_cmd = [
-                        "python",
+                        "python3",
                         "benchmark_collect.py",
                         trace_path,
                         profile,
