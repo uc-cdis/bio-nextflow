@@ -54,8 +54,15 @@ os.makedirs(BENCHMARK_DIR, exist_ok=True)
 BASE_PARAMS_FILE = "plp-params.yaml"
 BASE_WORKFLOW_FILE = os.path.abspath("plp.nf")
 
-# Get bucket from environment variable for TES S3 URIs
+# Get environment variables
 S3_BUCKET = os.environ.get("BUCKET")
+GEN3_TOKEN = os.environ.get("GEN3_TOKEN")
+
+if not GEN3_TOKEN:
+    print(
+        "GEN3_TOKEN environment variable is not set. Please set it to your S3 bucket name."
+    )
+    sys.exit(1)
 if not S3_BUCKET:
     print(
         "BUCKET environment variable is not set. Please set it to your S3 bucket name."
