@@ -49,7 +49,9 @@ RUN_TYPES = {
 PROFILES = ["tes", "local"]
 
 BENCHMARK_DIR = "./benchmarks"
+WORKFLOW_DIR = "./benchmarks/workflows"
 os.makedirs(BENCHMARK_DIR, exist_ok=True)
+os.makedirs(WORKFLOW_DIR, exist_ok=True)
 
 BASE_PARAMS_FILE = "plp-params.yaml"
 BASE_WORKFLOW_FILE = os.path.abspath("plp.nf")
@@ -76,7 +78,7 @@ def prepare_params_file(base_params, cohort_size, plpRunName):
     params["sample_size"] = cohort_size
     params["plpRunName"] = plpRunName
     params["model_list"] = [params["model_list"][0]]  # use first model for benchmark
-    run_params_file = os.path.join(BENCHMARK_DIR, f"{plpRunName}_params.yaml")
+    run_params_file = os.path.join(WORKFLOW_DIR, f"{plpRunName}_params.yaml")
     with open(run_params_file, "w") as f:
         yaml.dump(params, f)
     return run_params_file
@@ -120,9 +122,9 @@ def benchmark_batch():
                         trace_out = remote_trace_out
                     else:
                         trace_out = os.path.abspath(
-                            os.path.join(BENCHMARK_DIR, f"{benchmark_id}.trace.txt")
+                            os.path.join(WORKFLOW_DIR, f"{benchmark_id}.trace.txt")
                         )
-                        work_dir = os.path.join(BENCHMARK_DIR, benchmark_id)
+                        work_dir = os.path.join(WORKFLOW_DIR, benchmark_id)
                         os.makedirs(work_dir, exist_ok=True)
                         # TODO: gen3 orchestration doesn't support long-time tokens yet, uncomment after the fix
                         cmd = [
@@ -141,7 +143,7 @@ def benchmark_batch():
                         ]
                     # print(f"Submitting: {' '.join(cmd)}  [cwd={project_root}]")
                     # procs.append(subprocess.Popen(cmd, cwd=project_root))
-                    launch_dir = os.path.join(BENCHMARK_DIR, f"{benchmark_id}-launch")
+                    launch_dir = os.path.join(WORKFLOW_DIR, f"{benchmark_id}-launch")
                     os.makedirs(launch_dir, exist_ok=True)
                     print(f"Submitting: {' '.join(cmd)}  [cwd={launch_dir}]")
                     procs.append(subprocess.Popen(cmd, cwd=launch_dir))
@@ -151,6 +153,15 @@ def benchmark_batch():
                     time.sleep(1)
                 for i, trace_path in enumerate(trace_paths):
                     benchmark_id = f"{benchmark_id_base}-{i+1}"
+                    launch_dir = os.path.join(WORKFLOW_DIR, f"{benchmark_id}-launch")
+                    if profile == "tes":
+                        # S3 URI where Nextflow wrote task work directories
+                        work_path = f"{S3_BASE}/{benchmark_id}/work"
+                    else:
+                        # Nextflow resolved -w relative to launch_dir cwd
+                        work_path = os.path.abspath(
+                            os.path.join(launch_dir, WORKFLOW_DIR, benchmark_id)
+                        )
                     collect_cmd = [
                         "python3",
                         "benchmark_collect.py",
@@ -160,6 +171,8 @@ def benchmark_batch():
                         str(cohort),
                         benchmark_id,
                         os.path.join(BENCHMARK_DIR, "benchmark.csv"),
+                        work_path,
+                        launch_dir,
                     ]
                     print(f"Collecting benchmark for {benchmark_id}")
                     subprocess.run(collect_cmd)
