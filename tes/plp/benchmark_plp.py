@@ -45,8 +45,8 @@ RUN_TYPES = {
     "parallel5": 5,
     "parallel10": 10,
 }
-PROFILES = ["tes"]
-# PROFILES = ['tes', 'local']
+# PROFILES = ["local"]
+PROFILES = ["tes", "local"]
 
 BENCHMARK_DIR = "./benchmarks"
 os.makedirs(BENCHMARK_DIR, exist_ok=True)
