@@ -1,0 +1,50 @@
+seed: 42
+sample_size: 10000
+dataset_id: 1
+outcome_id: 3
+dataset_observation_window: 365
+outcome_observation_window: 3650
+require_time_at_risk: false
+min_time_at_risk: 364
+include_all_outcomes: true
+first_exposure_only: false
+remove_subjects_with_prior_outcome: true
+covariate_min_fraction: 0.001
+test_fraction: 0.25
+n_fold: 3
+plpRunName: "plp_run_output"
+#dataset_size: 0
+#training_set_size: 0
+#test_set_size: 0
+# TODO: mountpoint-s3 and filesystem limitations: model name with spaced not supported
+#       PR36 added file_name to model params, test without them after the fix
+model_list:
+  - name: "Random Forest"
+    params:
+      ntrees: [500]
+      criterion: ["gini"]
+      maxDepth: [17]
+      minSamplesSplit: [2]
+      minSamplesLeaf: [10]
+      minWeightFractionLeaf: [0]
+      mtries: ["sqrt"]
+      maxLeafNodes: [100]
+      minImpurityDecrease: [0]
+      bootstrap: [true]
+      maxSamples: [0.9]
+      oobScore: [false]
+      classWeight: ["balanced"]
+      seed: 42
+#  - name: "Lasso Logistic Regression"
+#    file_name: "lasso_logistic_regression"
+#    params:
+#      variance: 0.01
+#      seed: 42
+#  - name: "Light Gradient Boosting Machine"
+#    file_name: "light_gradient_boosting_machine"
+#    params:
+#      numLeaves: [20, 31]
+#      maxDepth: [-1, 5]
+#      minDataInLeaf: [10]
+#      learningRate: [0.05, 0.1]
+#      seed: 42
