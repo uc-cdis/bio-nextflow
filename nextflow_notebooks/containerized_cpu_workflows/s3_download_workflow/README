@@ -1,0 +1,7 @@
+The S3 download workflow (s3_download_workflow.ipynb) is a template workflow for constructing a workflow that involves downloading data directly from an S3 bucket during a Nextflow workflow.
+
+Since the AWS secrets necessary to access the bucket used in this demo cannot be shared, this workflow is solely designed to demonstrate how one may access data in an S3 bucket in their workflow.
+
+We encourage you to use the code and notebook in this demo as a template for how to pull data from your own S3 bucket into your workflow.
+
+Please refer to nextflow documentation on the BRH website (https://uc-cdis.github.io/BRH-documentation/nextflow-getting-started/) and the other workflow demos for details on all directions for building and deploying your own workflows.
