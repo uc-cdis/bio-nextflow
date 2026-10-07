@@ -2,7 +2,7 @@ FROM public.ecr.aws/u5x5h6w3/nextflow-approved/public:amazonlinux-base
 USER root
 
 RUN yum update && yum install -y \
-    python3 \
+    python3.13 \
     python3-pip \
     g++ \
     libgsl* \
@@ -19,3 +19,5 @@ RUN pip install pylibjpeg
 RUN pip install pylibjpeg-libjpeg
 RUN pip install -r /tmp/requirements.txt
 
+# point the python3 command to python3.13
+RUN ln -sf /usr/bin/python3.13 /usr/local/bin/python3
